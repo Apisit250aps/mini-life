@@ -8,6 +8,14 @@ import React from 'react'
 import { InputGroup, InputGroupAddon, InputGroupInput } from '../ui/input-group'
 import { EyeOffIcon, EyeIcon } from 'lucide-react'
 import { Textarea } from '../ui/textarea'
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '../ui/select'
 
 interface TextInputProps<TFieldValues extends FieldValues> extends Omit<
   ComponentProps<typeof Textarea>,
@@ -27,6 +35,22 @@ interface InputProps<TFieldValues extends FieldValues> extends Omit<
   controller: Control<TFieldValues>
   label: string
   description?: string
+}
+
+interface SelectOption {
+  value: string
+  label: string
+}
+interface SelectInputProps<TFieldValues extends FieldValues> extends Omit<
+  ComponentProps<typeof Select>,
+  'name'
+> {
+  name: Path<TFieldValues>
+  controller: Control<TFieldValues>
+  label: string
+  description?: string
+  options: SelectOption[]
+  placeholder?: string
 }
 
 function normalizeNumberValue(value: string) {
@@ -156,4 +180,41 @@ function PasswordInput<TFieldValues extends FieldValues>({
   )
 }
 
-export { FieldInput, PasswordInput, TextInput }
+function SelectInput<TFieldValues extends FieldValues>({
+  name,
+  controller,
+  label,
+  description,
+  options,
+  ...props
+}: SelectInputProps<TFieldValues>) {
+  return (
+    <Controller
+      name={name}
+      control={controller}
+      render={({ field, fieldState }) => (
+        <Field data-invalid={fieldState.invalid} className="gap-1 m-0">
+          <FieldLabel htmlFor={field.name}>{label}</FieldLabel>
+          <Select>
+            <SelectTrigger className="w-45">
+              <SelectValue placeholder={props.placeholder} />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                {options.map((option) => (
+                  <SelectItem key={option.value} value={option.value}>
+                    {option.label}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+          {description && <FieldDescription>{description}</FieldDescription>}
+          {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+        </Field>
+      )}
+    />
+  )
+}
+
+export { FieldInput, PasswordInput, TextInput, SelectInput }
