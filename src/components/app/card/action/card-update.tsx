@@ -14,14 +14,14 @@ export default function CardUpdateAction({ card }: { card: CardEntity }) {
     async (data: CardFormValues) => {
       await update(card.id, {
         title: data.title,
+        unit: data.unit,
         card: data.card,
         pick: data.pick,
         dangerous: data.dangerous as [number, number, number],
         score: data.score,
         action: data.action,
         token: data.token as 1 | 2,
-        age: data.age,
-        ageLevel: data.ageLevel,
+        mode: data.mode,
       })
       closeAll()
     },
@@ -41,14 +41,14 @@ export default function CardUpdateAction({ card }: { card: CardEntity }) {
         onSubmit={onSubmit}
         value={{
           title: card.title,
+          unit: card.unit,
           card: card.card,
           pick: card.pick,
           dangerous: card.dangerous,
           score: card.score,
           action: card.action,
           token: card.token,
-          age: card.age,
-          ageLevel: card.ageLevel,
+          mode: card.mode,
         }}
       />
     </ModalDialog>

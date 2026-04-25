@@ -23,6 +23,26 @@ const TOKEN_OPTIONS = [
   { value: '2', label: '2' },
 ]
 
+const CARD_MODE_OPTIONS = [
+  { value: 'NORMAL', label: 'Normal' },
+  { value: 'HARD', label: 'Hard' },
+]
+
+const CARD_ACTION_OPTIONS = [
+  { value: 'HEALTH_ONE', label: 'Health +1' },
+  { value: 'HEALTH_TWO', label: 'Health +2' },
+  { value: 'PICK_ONE', label: 'Pick +1' },
+  { value: 'PICK_TWO', label: 'Pick +2' },
+  { value: 'DESTROY', label: 'Destroy' },
+  { value: 'MULTIPLY', label: 'Multiply' },
+  { value: 'COPY', label: 'Copy' },
+  { value: 'REDUCE', label: 'Reduce' },
+  { value: 'SORT', label: 'Sort' },
+  { value: 'EXCHANGE_ONE', label: 'Exchange +1' },
+  { value: 'EXCHANGE_TWO', label: 'Exchange +2' },
+  { value: 'SWAP', label: 'Swap' },
+]
+
 export default function CardForm({
   onSubmit,
   value,
@@ -33,26 +53,26 @@ export default function CardForm({
       if (value) {
         return {
           title: value?.title,
+          unit: value?.unit,
           card: value?.card,
           pick: value?.pick,
           dangerous: value?.dangerous,
           score: value?.score,
           action: value?.action,
           token: value?.token,
-          age: value?.age,
-          ageLevel: value?.ageLevel,
+          mode: value?.mode,
         }
       }
       return {
         title: '',
+        unit: 1,
         card: 'KNOWLEDGE',
         pick: null,
         dangerous: [0, 0, 0],
         score: 0,
         action: null,
         token: 1,
-        age: null,
-        ageLevel: null,
+        mode: 'NORMAL',
       }
     }, [value]),
   })
@@ -75,6 +95,12 @@ export default function CardForm({
         label="ประเภทการ์ด"
         options={CARD_TYPE_OPTIONS}
       />
+      <FieldInput
+        name="unit"
+        controller={form.control}
+        label="จำนวนการ์ด"
+        type="number"
+      />
       <SelectInput
         name="token"
         controller={form.control}
@@ -90,7 +116,13 @@ export default function CardForm({
             label="คะแนน"
             type="number"
           />
-          <FieldInput name="action" controller={form.control} label="Action" />
+          <SelectInput
+            name="action"
+            controller={form.control}
+            label="Action"
+            options={CARD_ACTION_OPTIONS}
+            placeholder="เลือก action"
+          />
         </>
       )}
 
@@ -125,17 +157,11 @@ export default function CardForm({
 
       {isAge && (
         <>
-          <FieldInput
-            name="age"
+          <SelectInput
+            name="mode"
             controller={form.control}
-            label="อายุ"
-            type="number"
-          />
-          <FieldInput
-            name="ageLevel"
-            controller={form.control}
-            label="ระดับอายุ"
-            type="number"
+            label="โหมดการ์ด"
+            options={CARD_MODE_OPTIONS}
           />
         </>
       )}

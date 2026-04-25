@@ -19,14 +19,14 @@ const useCardMutation = () => {
     createMutation.mutateAsync({
       body: {
         title: data.title,
+        unit: data.unit,
         card: data.card,
         pick: data.pick,
         dangerous: data.dangerous,
         score: data.score,
         action: data.action,
         token: data.token as 1 | 2,
-        age: data.age,
-        ageLevel: data.ageLevel,
+        mode: data.mode,
       },
     })
   const update = (
@@ -37,14 +37,14 @@ const useCardMutation = () => {
       params: { path: { id } },
       body: {
         title: data.title,
+        unit: data.unit,
         card: data.card,
         pick: data.pick,
         dangerous: data.dangerous,
         score: data.score,
         action: data.action,
         token: data.token as 1 | 2,
-        age: data.age,
-        ageLevel: data.ageLevel,
+        mode: data.mode,
       },
     })
   const remove = (id: string) =>

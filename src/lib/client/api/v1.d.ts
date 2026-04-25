@@ -77,6 +77,8 @@ export interface components {
         };
         Card: {
             title: string;
+            /** Format: int32 */
+            unit: number;
             card: components["schemas"]["CardType"];
             pick?: number | null;
             dangerous?: [
@@ -86,16 +88,21 @@ export interface components {
             ];
             /** Format: int32 */
             score?: number;
-            action?: string | null;
+            action?: components["schemas"]["CardAction"] | null;
             /** @enum {number} */
             token?: 1 | 2;
-            age?: number | null;
-            ageLevel?: number | null;
+            mode?: components["schemas"]["CardMode"];
         } & components["schemas"]["BaseEntity"];
+        /** @enum {string} */
+        CardAction: "HEALTH_ONE" | "HEALTH_TWO" | "PICK_ONE" | "PICK_TWO" | "DESTROY" | "MULTIPLY" | "COPY" | "REDUCE" | "SORT" | "EXCHANGE_ONE" | "EXCHANGE_TWO" | "SWAP";
+        /** @enum {string} */
+        CardMode: "NORMAL" | "HARD";
         /** @enum {string} */
         CardType: "KNOWLEDGE" | "SKILL" | "DANGEROUS" | "AGE";
         CreateCardRequest: {
             title: string;
+            /** Format: int32 */
+            unit?: number;
             card?: components["schemas"]["CardType"];
             pick?: number | null;
             dangerous?: [
@@ -105,11 +112,10 @@ export interface components {
             ];
             /** Format: int32 */
             score?: number;
-            action?: string | null;
+            action?: components["schemas"]["CardAction"] | null;
             /** @enum {number} */
             token?: 1 | 2;
-            age?: number | null;
-            ageLevel?: number | null;
+            mode?: components["schemas"]["CardMode"];
         };
         CreateUserRequest: {
             name: string;
@@ -127,6 +133,8 @@ export interface components {
         };
         UpdateCardRequest: {
             title?: string;
+            /** Format: int32 */
+            unit?: number;
             card?: components["schemas"]["CardType"];
             pick?: number | null;
             dangerous?: [
@@ -136,11 +144,10 @@ export interface components {
             ];
             /** Format: int32 */
             score?: number;
-            action?: string | null;
+            action?: components["schemas"]["CardAction"] | null;
             /** @enum {number} */
             token?: 1 | 2;
-            age?: number | null;
-            ageLevel?: number | null;
+            mode?: components["schemas"]["CardMode"];
         };
         UpdateUserRequest: {
             name?: string;

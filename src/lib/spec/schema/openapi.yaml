@@ -634,10 +634,14 @@ components:
       type: object
       required:
         - title
+        - unit
         - card
       properties:
         title:
           type: string
+        unit:
+          type: integer
+          format: int32
         card:
           $ref: '#/components/schemas/CardType'
         pick:
@@ -659,25 +663,37 @@ components:
           format: int32
         action:
           anyOf:
-            - type: string
+            - $ref: '#/components/schemas/CardAction'
             - type: 'null'
         token:
           type: number
           enum:
             - 1
             - 2
-        age:
-          anyOf:
-            - type: integer
-              format: int32
-            - type: 'null'
-        ageLevel:
-          anyOf:
-            - type: integer
-              format: int32
-            - type: 'null'
+        mode:
+          $ref: '#/components/schemas/CardMode'
       allOf:
         - $ref: '#/components/schemas/BaseEntity'
+    CardAction:
+      type: string
+      enum:
+        - HEALTH_ONE
+        - HEALTH_TWO
+        - PICK_ONE
+        - PICK_TWO
+        - DESTROY
+        - MULTIPLY
+        - COPY
+        - REDUCE
+        - SORT
+        - EXCHANGE_ONE
+        - EXCHANGE_TWO
+        - SWAP
+    CardMode:
+      type: string
+      enum:
+        - NORMAL
+        - HARD
     CardType:
       type: string
       enum:
@@ -692,6 +708,9 @@ components:
       properties:
         title:
           type: string
+        unit:
+          type: integer
+          format: int32
         card:
           $ref: '#/components/schemas/CardType'
         pick:
@@ -713,23 +732,15 @@ components:
           format: int32
         action:
           anyOf:
-            - type: string
+            - $ref: '#/components/schemas/CardAction'
             - type: 'null'
         token:
           type: number
           enum:
             - 1
             - 2
-        age:
-          anyOf:
-            - type: integer
-              format: int32
-            - type: 'null'
-        ageLevel:
-          anyOf:
-            - type: integer
-              format: int32
-            - type: 'null'
+        mode:
+          $ref: '#/components/schemas/CardMode'
     CreateUserRequest:
       type: object
       required:
@@ -772,6 +783,9 @@ components:
       properties:
         title:
           type: string
+        unit:
+          type: integer
+          format: int32
         card:
           $ref: '#/components/schemas/CardType'
         pick:
@@ -793,23 +807,15 @@ components:
           format: int32
         action:
           anyOf:
-            - type: string
+            - $ref: '#/components/schemas/CardAction'
             - type: 'null'
         token:
           type: number
           enum:
             - 1
             - 2
-        age:
-          anyOf:
-            - type: integer
-              format: int32
-            - type: 'null'
-        ageLevel:
-          anyOf:
-            - type: integer
-              format: int32
-            - type: 'null'
+        mode:
+          $ref: '#/components/schemas/CardMode'
     UpdateUserRequest:
       type: object
       properties:

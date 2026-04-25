@@ -2,11 +2,26 @@ import * as field from '@aps/next-api/entities'
 import { z } from 'zod'
 
 const CARD_TYPE = ['KNOWLEDGE', 'SKILL', 'DANGEROUS', 'AGE'] as const
-
+const CARD_ACTION = [
+  'HEALTH_ONE',
+  'HEALTH_TWO',
+  'PICK_ONE',
+  'PICK_TWO',
+  'DESTROY',
+  'MULTIPLY',
+  'COPY',
+  'REDUCE',
+  'SORT',
+  'EXCHANGE_ONE',
+  'EXCHANGE_TWO',
+  'SWAP',
+] as const
+const CARD_MODE = ['NORMAL', 'HARD'] as const
 const BaseCardEntity = field.BaseEntity({
   // general
   /* title card */
   title: field.StringField(),
+  unit: field.NumberField().default(1).unwrap(),
   card: field
     .EnumField(...CARD_TYPE)
     .default('KNOWLEDGE')
@@ -19,32 +34,37 @@ const BaseCardEntity = field.BaseEntity({
     .default([0, 0, 0])
     .unwrap()
     .optional(),
-  // knowledge and skill
+  //
   score: field.NumberField().default(0).unwrap().optional(),
-  action: field.StringField().nullable().default(null).unwrap().optional(),
+  // knowledge and skill and age
+  action: field
+    .EnumField(...CARD_ACTION)
+    .nullable()
+    .default(null)
+    .unwrap()
+    .optional(),
   token: field.NumberField().min(1).max(2).default(1).unwrap().optional(),
-  // age
-  age: field.NumberField().nullable().default(null).unwrap().optional(),
-  ageLevel: field.NumberField().nullable().default(null).unwrap().optional(),
+  mode: field
+    .EnumField(...CARD_MODE)
+    .default('NORMAL')
+    .unwrap()
+    .optional(),
 })
 
 const CardKnowledgeEntity = BaseCardEntity.omit({
-  age: true,
-  ageLevel: true,
+  mode: true,
   dangerous: true,
   pick: true,
 })
 
 const CardSkillEntity = BaseCardEntity.omit({
-  age: true,
-  ageLevel: true,
+  mode: true,
   dangerous: true,
   pick: true,
 })
 
 const CardDangerousEntity = BaseCardEntity.omit({
-  age: true,
-  ageLevel: true,
+  mode: true,
   score: true,
   action: true,
 })
@@ -52,7 +72,6 @@ const CardDangerousEntity = BaseCardEntity.omit({
 const CardAgeEntity = BaseCardEntity.omit({
   dangerous: true,
   pick: true,
-  score: true,
   action: true,
 })
 
@@ -76,8 +95,7 @@ const CardFormSchema = BaseCardEntity.omit({
     .optional(),
   score: z.coerce.number().default(0).optional(),
   token: z.coerce.number().min(1).max(2).default(1).optional(),
-  age: z.coerce.number().nullable().default(null).optional(),
-  ageLevel: z.coerce.number().nullable().default(null).optional(),
+  mode: z.enum(CARD_MODE).default('NORMAL').optional(),
 })
 export type CardFormInput = z.input<typeof CardFormSchema>
 export type CardFormValues = z.output<typeof CardFormSchema>

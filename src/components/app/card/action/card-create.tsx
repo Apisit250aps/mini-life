@@ -14,14 +14,14 @@ export default function CardCreateAction() {
     async (data: CardFormValues) => {
       await create({
         title: data.title,
+        unit: data.unit,
         card: data.card,
         pick: data.pick,
         dangerous: data.dangerous as [number, number, number],
         score: data.score,
         action: data.action,
         token: data.token as 1 | 2,
-        age: data.age,
-        ageLevel: data.ageLevel,
+        mode: data.mode,
       })
       closeAll()
     },
