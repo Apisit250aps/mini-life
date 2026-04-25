@@ -8,6 +8,7 @@ import { secureHeaders } from 'hono/secure-headers'
 
 import { authHandler, initAuthConfig } from '@hono/auth-js'
 import authConfig from '@/configs/auth.config'
+import router from './lib/routes'
 
 const api = new Hono().basePath('/api')
 
@@ -24,5 +25,6 @@ api.use(
   })),
 )
 api.use('/auth/*', authHandler())
+api.route('', router)
 
 export default handle(api)

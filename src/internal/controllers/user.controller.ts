@@ -8,6 +8,4 @@ class UserController extends Controller<User> {
   override readonly prefix = 'users'
 }
 
-const userController = new UserController()
-
-export default userController
+export default UserController
