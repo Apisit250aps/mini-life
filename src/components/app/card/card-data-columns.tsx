@@ -23,6 +23,48 @@ export const cardColumns: ColumnDef<CardEntity>[] = [
     accessorKey: 'card',
   },
   {
+    header: 'จำนวน',
+    accessorKey: 'unit',
+  },
+  {
+    header: 'แต้ม',
+    accessorKey: 'score',
+  },
+  {
+    header: 'ความเสี่ยง',
+    accessorKey: 'dangerous',
+    cell: ({ getValue }) => {
+      const dangerous = getValue() as [number, number, number]
+      return (
+        <div className="flex flex-col">
+          <span>ง่าน: {dangerous[0]}</span>
+          <span>ปานกลาง: {dangerous[1]}</span>
+          <span>ยาก: {dangerous[2]}</span>
+        </div>
+      )
+    },
+  },
+  {
+    header: 'การ์ดที่เลือก',
+    accessorKey: 'pick',
+  },
+  {
+    header: 'จ่ายโทเคน',
+    accessorKey: 'token',
+  },
+  {
+    header: 'แอคชั่น',
+    accessorKey: 'action',
+    cell: ({ getValue }) => {
+      const action = getValue() as string
+      return <span className="font-mono">{action ?? '...'}</span>
+    },
+  },
+  {
+    header: 'โหมด',
+    accessorKey: 'mode',
+  },
+  {
     header: 'จัดการ',
     cell: ColumnAction,
   },
