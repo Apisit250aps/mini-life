@@ -4,6 +4,9 @@ import './globals.css'
 import { cn } from '@/lib/utils'
 import { TooltipProvider } from '@/components/ui/tooltip'
 import { SessionProvider } from 'next-auth/react'
+import { OverlayProvider } from '@/hooks/use-overlay'
+import { Toaster } from '@/components/ui/sonner'
+
 import { auth } from '@/auth'
 //
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans' })
@@ -42,13 +45,18 @@ export default async function RootLayout({
       )}
     >
       <body className="min-h-full flex flex-col">
-        <SessionProvider
-          session={session}
-          refetchInterval={0}
-          refetchOnWindowFocus={false}
-        >
-          <TooltipProvider>{children}</TooltipProvider>
-        </SessionProvider>
+        <OverlayProvider>
+          <TooltipProvider>
+            <SessionProvider
+              session={session}
+              refetchInterval={0}
+              refetchOnWindowFocus={false}
+            >
+              {children}
+            </SessionProvider>
+          </TooltipProvider>
+          <Toaster position="top-right" />
+        </OverlayProvider>
       </body>
     </html>
   )
