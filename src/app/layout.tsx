@@ -5,6 +5,7 @@ import { cn } from '@/lib/utils'
 import { TooltipProvider } from '@/components/ui/tooltip'
 import { SessionProvider } from 'next-auth/react'
 import { OverlayProvider } from '@/hooks/use-overlay'
+import TanstackQueryProvider from '@/hooks/tanstack-query'
 import { Toaster } from '@/components/ui/sonner'
 
 import { auth } from '@/auth'
@@ -45,18 +46,18 @@ export default async function RootLayout({
       )}
     >
       <body className="min-h-full flex flex-col">
-        <OverlayProvider>
-          <TooltipProvider>
-            <SessionProvider
-              session={session}
-              refetchInterval={0}
-              refetchOnWindowFocus={false}
-            >
-              {children}
-            </SessionProvider>
-          </TooltipProvider>
-          <Toaster position="top-right" />
-        </OverlayProvider>
+        <SessionProvider
+          session={session}
+          refetchInterval={0}
+          refetchOnWindowFocus={false}
+        >
+          <TanstackQueryProvider>
+            <OverlayProvider>
+              <TooltipProvider>{children}</TooltipProvider>
+              <Toaster position="top-right" />
+            </OverlayProvider>
+          </TanstackQueryProvider>
+        </SessionProvider>
       </body>
     </html>
   )
