@@ -1,3 +1,4 @@
+import { CardEntity } from '@/internal/entities/card.entity'
 import cardRepository from '@/internal/repositories/card.repo'
 import { GameProvider } from '@/lib/app/game'
 import React from 'react'
@@ -10,8 +11,16 @@ export default async function Layout({
 }) {
   const cards = await cardRepository.findAll({})
   const gameId = uuidv7()
+
+  const deck = cards.flatMap((card) =>
+    Array.from({ length: card.unit }, () => {
+      const id = uuidv7()
+      return { ...card, id }
+    }),
+  )
+
   return (
-    <GameProvider gameId={gameId} cards={cards}>
+    <GameProvider gameId={gameId} cards={deck}>
       {children}
     </GameProvider>
   )

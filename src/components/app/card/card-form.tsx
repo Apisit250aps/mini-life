@@ -28,7 +28,7 @@ const CARD_MODE_OPTIONS = [
   { value: 'HARD', label: 'Hard' },
 ]
 
-const CARD_ACTION_OPTIONS = [
+export const CARD_ACTION_OPTIONS = [
   { value: 'HEALTH_ONE', label: 'Health +1' },
   { value: 'HEALTH_TWO', label: 'Health +2' },
   { value: 'PICK_ONE', label: 'Pick +1' },

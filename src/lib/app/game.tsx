@@ -41,7 +41,6 @@ export function GameProvider({
   const [deck, setDeck] = React.useState<CardEntity[]>(cards)
   const [trash, setTrash] = React.useState<CardEntity[]>([])
   const [knowledge, setKnowledge] = React.useState<CardEntity[]>([])
-
   return (
     <GameContext.Provider
       value={{

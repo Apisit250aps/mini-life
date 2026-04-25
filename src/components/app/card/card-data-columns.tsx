@@ -3,6 +3,7 @@ import { CardEntity } from '@/internal/entities/card.entity'
 import { CellContext, ColumnDef } from '@tanstack/react-table'
 import CardUpdateAction from './action/card-update'
 import CardDelete from './action/card-delete'
+import { CARD_ACTION_OPTIONS } from './card-form'
 
 const ColumnAction = ({ row }: CellContext<CardEntity, unknown>) => {
   return (
@@ -57,7 +58,10 @@ export const cardColumns: ColumnDef<CardEntity>[] = [
     accessorKey: 'action',
     cell: ({ getValue }) => {
       const action = getValue() as string
-      return <span className="font-mono">{action ?? '...'}</span>
+      const actionLabel = CARD_ACTION_OPTIONS.find(
+        (option) => option.value === action,
+      )?.label
+      return <span className="font-mono">{actionLabel ?? '...'}</span>
     },
   },
   {
