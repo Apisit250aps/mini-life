@@ -1,14 +1,12 @@
 import "@typespec/http";
 import "@typespec/rest";
 
-using TypeSpec.Http;
-using TypeSpec.Rest;
+import "./models/common.tsp";
+import "./models/user.tsp";
+import "./models/card.tsp";
+
+import "./services/user.tsp";
+import "./services/card.tsp";
 
 @service(#{ title: "Mini Life Service" })
 namespace MiniLifeService;
-
-@route("/health")
-@tag("Health")
-op health(): {
-  success: true;
-};
