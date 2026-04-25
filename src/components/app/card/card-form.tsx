@@ -41,6 +41,10 @@ const CARD_ACTION_OPTIONS = [
   { value: 'EXCHANGE_ONE', label: 'Exchange +1' },
   { value: 'EXCHANGE_TWO', label: 'Exchange +2' },
   { value: 'SWAP', label: 'Swap' },
+  { value: 'HURT_ONE', label: 'Health -1' },
+  { value: 'HURT_TWO', label: 'Health -2' },
+  { value: 'ZERO', label: 'Zero' },
+  { value: 'STOP', label: 'Stop' },
 ]
 
 export default function CardForm({
@@ -79,7 +83,7 @@ export default function CardForm({
 
   const cardType = useWatch({ control: form.control, name: 'card' })
 
-  const isKnowledgeOrSkill = cardType === 'KNOWLEDGE' || cardType === 'SKILL'
+  const isKnowledgeOrSkill = cardType === 'KNOWLEDGE' || cardType === 'SKILL' || cardType === 'AGE'
   const isDangerous = cardType === 'DANGEROUS'
   const isAge = cardType === 'AGE'
 

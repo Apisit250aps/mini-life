@@ -88,13 +88,11 @@ export interface components {
             ];
             /** Format: int32 */
             score?: number;
-            action?: components["schemas"]["CardAction"] | null;
+            action?: string | null;
             /** @enum {number} */
             token?: 1 | 2;
             mode?: components["schemas"]["CardMode"];
         } & components["schemas"]["BaseEntity"];
-        /** @enum {string} */
-        CardAction: "HEALTH_ONE" | "HEALTH_TWO" | "PICK_ONE" | "PICK_TWO" | "DESTROY" | "MULTIPLY" | "COPY" | "REDUCE" | "SORT" | "EXCHANGE_ONE" | "EXCHANGE_TWO" | "SWAP";
         /** @enum {string} */
         CardMode: "NORMAL" | "HARD";
         /** @enum {string} */
@@ -112,7 +110,7 @@ export interface components {
             ];
             /** Format: int32 */
             score?: number;
-            action?: components["schemas"]["CardAction"] | null;
+            action?: string | null;
             /** @enum {number} */
             token?: 1 | 2;
             mode?: components["schemas"]["CardMode"];
@@ -144,7 +142,7 @@ export interface components {
             ];
             /** Format: int32 */
             score?: number;
-            action?: components["schemas"]["CardAction"] | null;
+            action?: string | null;
             /** @enum {number} */
             token?: 1 | 2;
             mode?: components["schemas"]["CardMode"];

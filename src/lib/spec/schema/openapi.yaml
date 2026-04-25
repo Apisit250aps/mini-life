@@ -663,7 +663,7 @@ components:
           format: int32
         action:
           anyOf:
-            - $ref: '#/components/schemas/CardAction'
+            - type: string
             - type: 'null'
         token:
           type: number
@@ -674,21 +674,6 @@ components:
           $ref: '#/components/schemas/CardMode'
       allOf:
         - $ref: '#/components/schemas/BaseEntity'
-    CardAction:
-      type: string
-      enum:
-        - HEALTH_ONE
-        - HEALTH_TWO
-        - PICK_ONE
-        - PICK_TWO
-        - DESTROY
-        - MULTIPLY
-        - COPY
-        - REDUCE
-        - SORT
-        - EXCHANGE_ONE
-        - EXCHANGE_TWO
-        - SWAP
     CardMode:
       type: string
       enum:
@@ -732,7 +717,7 @@ components:
           format: int32
         action:
           anyOf:
-            - $ref: '#/components/schemas/CardAction'
+            - type: string
             - type: 'null'
         token:
           type: number
@@ -807,7 +792,7 @@ components:
           format: int32
         action:
           anyOf:
-            - $ref: '#/components/schemas/CardAction'
+            - type: string
             - type: 'null'
         token:
           type: number

@@ -15,6 +15,11 @@ const CARD_ACTION = [
   'EXCHANGE_ONE',
   'EXCHANGE_TWO',
   'SWAP',
+  // for age card
+  'HURT_ONE',
+  'HURT_TWO',
+  'ZERO',
+  'STOP',
 ] as const
 const CARD_MODE = ['NORMAL', 'HARD'] as const
 const BaseCardEntity = field.BaseEntity({
@@ -72,7 +77,6 @@ const CardDangerousEntity = BaseCardEntity.omit({
 const CardAgeEntity = BaseCardEntity.omit({
   dangerous: true,
   pick: true,
-  action: true,
 })
 
 export type CardEntity = z.infer<typeof BaseCardEntity>
@@ -93,6 +97,7 @@ const CardFormSchema = BaseCardEntity.omit({
     .length(3)
     .default([0, 0, 0])
     .optional(),
+  unit: z.coerce.number().default(1).optional(),
   score: z.coerce.number().default(0).optional(),
   token: z.coerce.number().min(1).max(2).default(1).optional(),
   mode: z.enum(CARD_MODE).default('NORMAL').optional(),

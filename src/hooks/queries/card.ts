@@ -24,7 +24,7 @@ const useCardMutation = () => {
         pick: data.pick,
         dangerous: data.dangerous,
         score: data.score,
-        action: data.action,
+        action: data.action as string,
         token: data.token as 1 | 2,
         mode: data.mode,
       },
