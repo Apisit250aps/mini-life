@@ -7,7 +7,8 @@ import {
 } from '@/internal/entities/card.entity'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm, useWatch } from 'react-hook-form'
-import React from 'react'
+import React, { useMemo } from 'react'
+import { Button } from '@/components/ui/button'
 
 const CARD_TYPE_OPTIONS = [
   { value: 'KNOWLEDGE', label: 'ความรู้' },
@@ -21,20 +22,38 @@ const TOKEN_OPTIONS = [
   { value: '2', label: '2' },
 ]
 
-export default function CardForm() {
+export default function CardForm({
+  onSubmit,
+  value,
+}: FormValueProps<CardFormValues>) {
   const form = useForm<CardFormValues>({
     resolver: zodResolver(CardFormSchema),
-    defaultValues: {
-      title: '',
-      card: 'KNOWLEDGE',
-      pick: null,
-      dangerous: [0, 0, 0],
-      score: 0,
-      action: null,
-      token: 1,
-      age: null,
-      ageLevel: null,
-    },
+    defaultValues: useMemo(() => {
+      if (value) {
+        return {
+          title: value?.title,
+          card: value?.card,
+          pick: value?.pick,
+          dangerous: value?.dangerous,
+          score: value?.score,
+          action: value?.action,
+          token: value?.token,
+          age: value?.age,
+          ageLevel: value?.ageLevel,
+        }
+      }
+      return {
+        title: '',
+        card: 'KNOWLEDGE',
+        pick: null,
+        dangerous: [0, 0, 0],
+        score: 0,
+        action: null,
+        token: 1,
+        age: null,
+        ageLevel: null,
+      }
+    }, [value]),
   })
 
   const cardType = useWatch({ control: form.control, name: 'card' })
@@ -45,7 +64,7 @@ export default function CardForm() {
 
   return (
     <form
-      onSubmit={form.handleSubmit((data) => console.log(data))}
+      onSubmit={form.handleSubmit(onSubmit)}
       className="flex flex-col gap-4"
     >
       <FieldInput name="title" controller={form.control} label="ชื่อการ์ด" />
@@ -119,6 +138,9 @@ export default function CardForm() {
           />
         </>
       )}
+      <div className="flex justify-end">
+        <Button>{value ? 'บันทึกการเปลี่ยนแปลง' : 'สร้างการ์ด'}</Button>
+      </div>
     </form>
   )
 }
