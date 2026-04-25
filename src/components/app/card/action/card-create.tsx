@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button'
 import { CardFormValues } from '@/internal/entities/card.entity'
 import { useCardMutation } from '@/lib/client/queries/card.query'
 import { useOverlay } from '@/hooks/use-overlay'
+import { Plus } from 'lucide-react'
 
 export default function CardCreateAction() {
   const { create } = useCardMutation()
@@ -27,7 +28,14 @@ export default function CardCreateAction() {
     [create, closeAll],
   )
   return (
-    <ModalDialog title={'สร้างการ์ดใหม่'} trigger={<Button>สร้างการ์ด</Button>}>
+    <ModalDialog
+      title={'สร้างการ์ดใหม่'}
+      trigger={
+        <Button>
+          <Plus /> สร้างการ์ด
+        </Button>
+      }
+    >
       <CardForm onSubmit={onSubmit} />
     </ModalDialog>
   )
