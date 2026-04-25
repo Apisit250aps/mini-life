@@ -3,6 +3,7 @@
 import { FieldInput, SelectInput } from '@/components/share/input'
 import {
   CardFormSchema,
+  type CardFormInput,
   type CardFormValues,
 } from '@/internal/entities/card.entity'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -26,7 +27,7 @@ export default function CardForm({
   onSubmit,
   value,
 }: FormValueProps<CardFormValues>) {
-  const form = useForm<CardFormValues>({
+  const form = useForm<CardFormInput, unknown, CardFormValues>({
     resolver: zodResolver(CardFormSchema),
     defaultValues: useMemo(() => {
       if (value) {
@@ -99,19 +100,19 @@ export default function CardForm({
             name="pick"
             controller={form.control}
             label="จำนวนหยิบ"
-            type="number"
+            type={'number'}
           />
           <FieldInput
             name="dangerous.0"
             controller={form.control}
             label="อันตราย 1 (0–10)"
-            type="number"
+            type={'number'}
           />
           <FieldInput
             name="dangerous.1"
             controller={form.control}
             label="อันตราย 2 (0–10)"
-            type="number"
+            type={'number'}
           />
           <FieldInput
             name="dangerous.2"

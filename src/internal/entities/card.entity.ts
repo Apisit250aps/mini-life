@@ -67,8 +67,20 @@ const CardFormSchema = BaseCardEntity.omit({
   createdAt: true,
   updatedAt: true,
   deletedAt: true,
+}).extend({
+  pick: z.coerce.number().nullable().default(null).optional(),
+  dangerous: z
+    .array(z.coerce.number().min(0).max(10))
+    .length(3)
+    .default([0, 0, 0])
+    .optional(),
+  score: z.coerce.number().default(0).optional(),
+  token: z.coerce.number().min(1).max(2).default(1).optional(),
+  age: z.coerce.number().nullable().default(null).optional(),
+  ageLevel: z.coerce.number().nullable().default(null).optional(),
 })
-export type CardFormValues = z.infer<typeof CardFormSchema>
+export type CardFormInput = z.input<typeof CardFormSchema>
+export type CardFormValues = z.output<typeof CardFormSchema>
 
 export {
   BaseCardEntity,
