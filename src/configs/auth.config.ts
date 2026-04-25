@@ -1,5 +1,6 @@
 import { AuthConfig } from '@auth/core'
 import Credentials from '@auth/core/providers/credentials'
+import Google from '@auth/core/providers/google'
 import userRepository from '@/internal/repositories/user.repo'
 
 const authConfig = {
@@ -7,6 +8,7 @@ const authConfig = {
     signIn: '/login',
   },
   providers: [
+    Google,
     Credentials({
       name: 'credentials',
       credentials: {

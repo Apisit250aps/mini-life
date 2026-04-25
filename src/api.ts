@@ -12,7 +12,7 @@ import router from './lib/routes'
 
 const api = new Hono().basePath('/api')
 
-api.use(secureHeaders())
+// api.use(secureHeaders())
 api.use(logger())
 api.use(prettyJSON())
 api.use('*', requestId())
