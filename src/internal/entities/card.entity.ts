@@ -62,10 +62,19 @@ export type CardSkill = z.infer<typeof CardSkillEntity>
 export type CardDangerous = z.infer<typeof CardDangerousEntity>
 export type CardAge = z.infer<typeof CardAgeEntity>
 
+const CardFormSchema = BaseCardEntity.omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+  deletedAt: true,
+})
+export type CardFormValues = z.infer<typeof CardFormSchema>
+
 export {
   BaseCardEntity,
   CardKnowledgeEntity,
   CardSkillEntity,
   CardDangerousEntity,
   CardAgeEntity,
+  CardFormSchema,
 }

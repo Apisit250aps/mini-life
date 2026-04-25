@@ -195,7 +195,10 @@ function SelectInput<TFieldValues extends FieldValues>({
       render={({ field, fieldState }) => (
         <Field data-invalid={fieldState.invalid} className="gap-1 m-0">
           <FieldLabel htmlFor={field.name}>{label}</FieldLabel>
-          <Select>
+          <Select
+            value={String(field.value ?? '')}
+            onValueChange={field.onChange}
+          >
             <SelectTrigger className="w-45">
               <SelectValue placeholder={props.placeholder} />
             </SelectTrigger>
