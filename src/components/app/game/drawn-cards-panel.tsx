@@ -57,39 +57,41 @@ export function DrawnCardsPanel({ cardsInHand }: DrawnCardsPanelProps) {
           </div>
         ) : (
           <AnimatedList className="items-stretch gap-3" delay={180}>
-            {cardsInHand.map((card) => (
-              <Card
-                key={card.id}
-                className="overflow-hidden border-white/40 bg-[linear-gradient(180deg,rgba(255,255,255,0.96),rgba(240,249,255,0.82))] shadow-lg shadow-sky-950/10 dark:border-white/10 dark:bg-[linear-gradient(180deg,rgba(15,23,42,0.9),rgba(15,23,42,0.6))]"
-              >
-                <CardHeader>
-                  <div className="flex items-start justify-between gap-3">
-                    <div>
-                      <CardDescription className="text-xs uppercase tracking-[0.24em] text-slate-500 dark:text-slate-400">
-                        {card.card}
-                      </CardDescription>
-                      <CardTitle className="mt-2 text-lg font-semibold text-slate-950 dark:text-white">
-                        {card.title}
-                      </CardTitle>
+            {cardsInHand.map((card, index) => {
+              return (
+                <Card
+                  key={`${card.id}-${index}`}
+                  className="overflow-hidden border-white/40 bg-[linear-gradient(180deg,rgba(255,255,255,0.96),rgba(240,249,255,0.82))] shadow-lg shadow-sky-950/10 dark:border-white/10 dark:bg-[linear-gradient(180deg,rgba(15,23,42,0.9),rgba(15,23,42,0.6))]"
+                >
+                  <CardHeader>
+                    <div className="flex items-start justify-between gap-3">
+                      <div>
+                        <CardDescription className="text-xs uppercase tracking-[0.24em] text-slate-500 dark:text-slate-400">
+                          {card.card}
+                        </CardDescription>
+                        <CardTitle className="mt-2 text-lg font-semibold text-slate-950 dark:text-white">
+                          {card.title}
+                        </CardTitle>
+                      </div>
+                      <Badge className="rounded-full bg-emerald-500/10 px-2.5 py-1 text-emerald-700 dark:text-emerald-300">
+                        +{card.score ?? 0}
+                      </Badge>
                     </div>
-                    <Badge className="rounded-full bg-emerald-500/10 px-2.5 py-1 text-emerald-700 dark:text-emerald-300">
-                      +{card.score ?? 0}
-                    </Badge>
-                  </div>
-                </CardHeader>
-                <CardContent className="space-y-2 text-sm text-slate-600 dark:text-slate-300">
-                  <p>{formatAction(card.action)}</p>
-                  <div className="flex flex-wrap gap-2 text-xs text-slate-500 dark:text-slate-400">
-                    <Badge variant="outline" className="rounded-full">
-                      token {card.token ?? 0}
-                    </Badge>
-                    <Badge variant="outline" className="rounded-full">
-                      mode {card.mode ?? 'NORMAL'}
-                    </Badge>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+                  </CardHeader>
+                  <CardContent className="space-y-2 text-sm text-slate-600 dark:text-slate-300">
+                    <p>{formatAction(card.action)}</p>
+                    <div className="flex flex-wrap gap-2 text-xs text-slate-500 dark:text-slate-400">
+                      <Badge variant="outline" className="rounded-full">
+                        token {card.token ?? 0}
+                      </Badge>
+                      <Badge variant="outline" className="rounded-full">
+                        mode {card.mode ?? 'NORMAL'}
+                      </Badge>
+                    </div>
+                  </CardContent>
+                </Card>
+              )
+            })}
           </AnimatedList>
         )}
       </CardContent>

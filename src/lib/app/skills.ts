@@ -1,3 +1,5 @@
+'use client'
+
 import { useMemo } from 'react'
 import { useGame } from './game'
 
@@ -153,7 +155,7 @@ const useCardAction = () => {
     activeSkills,
     isPassiveSkill,
     isActiveSkill,
-    // 
+    //
     actionPassiveSkill,
   }
 }
