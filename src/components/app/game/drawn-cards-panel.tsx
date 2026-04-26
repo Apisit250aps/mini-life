@@ -4,12 +4,14 @@ import { AnimatedList } from '@/components/ui/animated-list'
 import { Badge } from '@/components/ui/badge'
 import {
   Card,
+  CardAction,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
 import { CardEntity } from '@/internal/entities/card.entity'
+import { useGame } from '@/lib/app/game'
 
 type DrawnCardsPanelProps = {
   cardsInHand: CardEntity[]
@@ -19,22 +21,25 @@ const formatAction = (action: string | null | undefined) =>
   action ? action.replaceAll('_', ' ') : 'ไม่มีเอฟเฟกต์'
 
 export function DrawnCardsPanel({ cardsInHand }: DrawnCardsPanelProps) {
+  const { gameState } = useGame()
   return (
     <Card className="h-full min-h-0 border-white/30 bg-white/75 shadow-xl shadow-slate-950/10 backdrop-blur-xl dark:border-white/10 dark:bg-white/5">
       <CardHeader className="gap-2">
         <CardDescription className="text-xs uppercase tracking-[0.28em] text-slate-500 dark:text-slate-400">
           Drawn Cards
         </CardDescription>
-        <div className="flex items-center justify-between gap-4">
-          <CardTitle className="text-2xl font-semibold text-slate-950 dark:text-white">
-            รายการการ์ดที่จั่ว
-          </CardTitle>
-          <Badge className="rounded-full bg-slate-950 text-white dark:bg-white dark:text-slate-950">
+        <CardTitle className="text-2xl font-semibold text-slate-950 dark:text-white">
+          รายการการ์ดที่จั่ว
+        </CardTitle>
+
+        <CardAction className="space-x-2">
+          <Badge className=" bg-slate-950 text-white dark:bg-white dark:text-slate-950">
             {cardsInHand.length} cards
           </Badge>
-        </div>
+          <Badge>{gameState.state}</Badge>
+        </CardAction>
       </CardHeader>
-      <CardContent className="min-h-0 flex-1 overflow-y-auto pr-1">
+      <CardContent className="min-h-0 flex-1 overflow-y-auto pr-1 py-4">
         {cardsInHand.length === 0 ? (
           <div className="flex min-h-96 items-center justify-center rounded-3xl border border-dashed border-slate-300/80 bg-slate-950/3 p-8 text-center dark:border-white/10 dark:bg-white/3">
             <div className="space-y-3">

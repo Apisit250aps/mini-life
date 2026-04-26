@@ -10,18 +10,7 @@ import { GridPattern } from '@/components/ui/grid-pattern'
 
 export default function Page() {
   const { gameId, gameState } = useGame()
-  const { drawCard, randomEvent, selectEvent } = useGameAction()
-
-  const handleDrawCard = () => {
-    const card = drawCard()
-    if (card) {
-      console.log('Drew card:', card)
-    }
-  }
-
-  const handleRandomEvent = () => {
-    randomEvent()
-  }
+  const { selectEvent } = useGameAction()
 
   return (
     <main className="relative h-screen overflow-hidden bg-[radial-gradient(circle_at_top,rgba(14,165,233,0.18),transparent_30%),radial-gradient(circle_at_bottom_right,rgba(249,115,22,0.18),transparent_28%),linear-gradient(180deg,#f8fbff_0%,#eef4ff_45%,#f8fafc_100%)] dark:bg-[radial-gradient(circle_at_top,rgba(14,165,233,0.2),transparent_25%),radial-gradient(circle_at_bottom_right,rgba(249,115,22,0.15),transparent_30%),linear-gradient(180deg,#09090b_0%,#0f172a_45%,#020617_100%)]">
@@ -35,14 +24,12 @@ export default function Page() {
           <DrawnCardsPanel cardsInHand={gameState.cardsInHand} />
           <EventStatusPanel
             gameEvents={gameState.gameEvent}
+            selectedEvent={gameState.selectEvent}
             onSelectEvent={selectEvent}
           />
         </section>
       </div>
-      <GameActionDock
-        onRandomEvent={handleRandomEvent}
-        onDrawCard={handleDrawCard}
-      />
+      <GameActionDock />
     </main>
   )
 }

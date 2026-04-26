@@ -15,6 +15,7 @@ import { GameEvent } from '@/lib/app/game'
 
 type EventStatusPanelProps = {
   gameEvents: GameEvent[]
+  selectedEvent?: GameEvent
   onSelectEvent: (event: GameEvent) => void
 }
 
@@ -23,6 +24,7 @@ const formatAction = (action: string | null | undefined) =>
 
 export function EventStatusPanel({
   gameEvents,
+  selectedEvent,
   onSelectEvent,
 }: EventStatusPanelProps) {
   return (
@@ -41,6 +43,27 @@ export function EventStatusPanel({
         </div>
       </CardHeader>
       <CardContent className="min-h-0 flex-1 overflow-y-auto pr-1">
+        {selectedEvent ? (
+          <div className="mb-3 rounded-2xl border border-emerald-300/70 bg-emerald-500/10 p-3 dark:border-emerald-400/30 dark:bg-emerald-400/10">
+            <div className="mb-2 flex items-center justify-between gap-2">
+              <p className="text-xs uppercase tracking-[0.24em] text-emerald-700 dark:text-emerald-300">
+                Event ที่เลือก
+              </p>
+              <Badge className="rounded-full bg-emerald-600 text-white dark:bg-emerald-500">
+                ล่าสุด
+              </Badge>
+            </div>
+            <p className="text-sm font-semibold text-slate-900 dark:text-white">
+              {selectedEvent.dangerous.title}
+            </p>
+            <p className="mt-1 text-xs text-slate-600 dark:text-slate-300">
+              รับ: {selectedEvent.knowledge.title} • แต้ม{' '}
+              {selectedEvent.knowledge.score ?? 0} •{' '}
+              {formatAction(selectedEvent.knowledge.action)}
+            </p>
+          </div>
+        ) : null}
+
         {gameEvents.length === 0 ? (
           <div className="flex min-h-96 items-center justify-center rounded-3xl border border-dashed border-slate-300/80 bg-slate-950/3 p-8 text-center dark:border-white/10 dark:bg-white/3">
             <div className="space-y-3">

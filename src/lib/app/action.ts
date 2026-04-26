@@ -23,6 +23,9 @@ const useGameAction = () => {
   }
 
   const randomEvent = () => {
+    if (game.gameState.state !== 'idle') {
+      return
+    }
     const events: GameEvent[] = []
     for (let i = 0; i < 3; i++) {
       const randomKnowledge = game.gameState.knowledge[i]
@@ -37,6 +40,7 @@ const useGameAction = () => {
       dangerous: prev.dangerous.slice(3),
       knowledge: prev.knowledge.slice(3),
       gameEvent: [...prev.gameEvent, ...events],
+      state: 'event',
     }))
   }
 
@@ -49,6 +53,7 @@ const useGameAction = () => {
       gameEvent: [],
       selectEvent: event,
       pickPoint: event.dangerous.pick || 0,
+      state: 'attack',
     }))
   }
 
