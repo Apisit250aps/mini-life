@@ -9,8 +9,10 @@ class CardRepository extends Repository<CardEntity> {
 
   readonly indexes = [
     {
-      key: { title: 1, card: 1 },
+      key: { title: 1, card: 1, score: 1 },
       unique: true,
+      name: 'title_card_score_unique_index',
+      partialFilterExpression: { deletedAt: null },
     },
   ]
 }

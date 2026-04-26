@@ -34,7 +34,7 @@ const BaseCardEntity = field.BaseEntity({
   // dangerous
   pick: field.NumberField().nullable().default(null).unwrap().optional(),
   dangerous: z
-    .array(z.number().min(0).max(10))
+    .array(z.number().min(0).max(20))
     .length(3)
     .default([0, 0, 0])
     .unwrap()
@@ -93,7 +93,7 @@ const CardFormSchema = BaseCardEntity.omit({
 }).extend({
   pick: z.coerce.number().nullable().default(null).optional(),
   dangerous: z
-    .array(z.coerce.number().min(0).max(10))
+    .array(z.coerce.number().min(0).max(20))
     .length(3)
     .default([0, 0, 0])
     .optional(),
