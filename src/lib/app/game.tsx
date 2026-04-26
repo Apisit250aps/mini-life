@@ -8,9 +8,15 @@ export type GameEvent = {
   knowledge: CardEntity
 }
 
+export type State = 'idle' | 'event' | 'attack' | 'destroy' | 'game_over'
+
 export type GameState = {
+  // global
+  state: State
+  phase: number
   // player state
   health: number
+  pickPoint: number
   cardsInHand: CardEntity[]
   scoreInHand: number
   // environment state
@@ -48,9 +54,14 @@ export function GameProvider({
   children: React.ReactNode
 }) {
   const [gameState, setGameState] = React.useState<GameState>({
+    state: 'idle',
+    phase: 0,
+    //
     health: 20,
+    pickPoint: 0,
     scoreInHand: 0,
     cardsInHand: [],
+    //
     deck: [],
     trash: [],
     knowledge: shuffleCardsByType(cards, 'KNOWLEDGE'),

@@ -8,12 +8,16 @@ const useGameAction = () => {
   }
 
   const drawCard = () => {
+    if (!game.gameState.pickPoint) {
+      return null
+    }
     const card = game.gameState.skill[0]
     game.setGameState((prev) => ({
       ...prev,
       skill: prev.skill.slice(1),
       cardsInHand: [...prev.cardsInHand, card],
       scoreInHand: prev.scoreInHand + (card.score || 0),
+      pickPoint: prev.pickPoint - 1,
     }))
     return card
   }
@@ -44,6 +48,7 @@ const useGameAction = () => {
       deck: [...prev.deck, event.knowledge, event.dangerous],
       gameEvent: [],
       selectEvent: event,
+      pickPoint: event.dangerous.pick || 0,
     }))
   }
 
