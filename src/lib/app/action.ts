@@ -4,6 +4,7 @@ import { useCallback, useEffect } from 'react'
 import { GameEvent, useGame, shuffleCardsByType } from './game'
 import { toast } from 'sonner'
 import { useCardAction } from './skills'
+import { CardEntity } from '@/internal/entities/card.entity'
 
 const useGameAction = () => {
   const action = useCardAction()
@@ -19,63 +20,73 @@ const useGameAction = () => {
   }, [defaultGameState, game])
 
   const drawCard = useCallback(() => {
-    console.log('skill before', game.gameState.skill.length)
-    if (!game.gameState.pickPoint) {
-      toast.error('คุณไม่มีแต้มให้จั่วการ์ด')
+    if (game.gameState.state !== 'attack') {
+      toast.error('คุณไม่สามารถจั่วการ์ดได้ในขณะนี้')
       return null
     }
-
-    const card = game.gameState.skill[0]
-    const newSkillCards = game.gameState.skill.slice(1)
-    const shouldReshuffle = newSkillCards.length === 0
-
     game.setGameState((prev) => {
+      if (!prev.pickPoint) {
+        toast.error('คุณไม่มีแต้มให้จั่วการ์ด')
+        return prev
+      }
+
+      const card = prev.skill[0]
+      if (!card) {
+        return prev
+      }
+
+      const nextSkillCards = prev.skill.slice(1)
+
       const updated = {
         ...prev,
-        skill: newSkillCards,
+        skill: nextSkillCards,
         cardsInHand: [...prev.cardsInHand, card],
         scoreInHand: prev.scoreInHand + (card.score || 0),
         pickPoint: prev.pickPoint - 1,
         dangerousPoint: prev.dangerousPoint - (card.score || 0),
       }
 
-      if (shouldReshuffle) {
-        console.log('reshuffle skill')
+      if (nextSkillCards.length === 0) {
         updated.skill = shuffleCardsByType([...updated.cardsInHand], 'SKILL')
+      }
+
+      if (action.isActiveSkill(card.action || '')) {
+        action.actionPassiveSkill(card.action!)
       }
 
       return updated
     })
-    console.log('skill after', newSkillCards.length)
-
-    if (action.isPassiveSkill(card.action!)) {
-      action.actionPassiveSkill(card.action)
-    }
-
-    return card
   }, [action, game])
 
   const randomEvent = useCallback(() => {
-    if (game.gameState.state !== 'idle') {
+    let blocked = false
+    game.setGameState((prev) => {
+      if (prev.state !== 'idle') {
+        blocked = true
+        return prev
+      }
+
+      const events: GameEvent[] = Array.from({ length: 3 })
+        .map((_, i) => ({
+          knowledge: prev.knowledge[i],
+          dangerous: prev.dangerous[i],
+        }))
+        .filter((event): event is GameEvent =>
+          Boolean(event.knowledge && event.dangerous),
+        )
+
+      return {
+        ...prev,
+        dangerous: prev.dangerous.slice(3),
+        knowledge: prev.knowledge.slice(3),
+        gameEvent: [...prev.gameEvent, ...events],
+        state: 'event',
+      }
+    })
+
+    if (blocked) {
       toast.error('ไม่สามารถสุ่มเหตุการณ์ได้ในขณะนี้')
-      return
     }
-    const events: GameEvent[] = []
-    for (let i = 0; i < 3; i++) {
-      const randomKnowledge = game.gameState.knowledge[i]
-      const randomDangerous = game.gameState.dangerous[i]
-      events.push({
-        knowledge: randomKnowledge,
-        dangerous: randomDangerous,
-      })
-    }
-    game.setGameState((prev) => ({
-      ...prev,
-      dangerous: prev.dangerous.slice(3),
-      knowledge: prev.knowledge.slice(3),
-      gameEvent: [...prev.gameEvent, ...events],
-      state: 'event',
-    }))
   }, [game])
 
   const selectEvent = useCallback(

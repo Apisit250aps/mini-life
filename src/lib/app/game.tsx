@@ -41,6 +41,23 @@ type GameContextValue = {
   // state
 }
 
+type GameAction =
+  | { type: 'SET'; payload: React.SetStateAction<GameState> }
+  | { type: 'RESET'; payload: GameState }
+
+const gameReducer = (state: GameState, action: GameAction): GameState => {
+  switch (action.type) {
+    case 'SET':
+      return typeof action.payload === 'function'
+        ? action.payload(state)
+        : action.payload
+    case 'RESET':
+      return action.payload
+    default:
+      return state
+  }
+}
+
 const GameContext = createContext<GameContextValue | null>(null)
 
 export const shuffleCardsByType = (cards: CardEntity[], type: string) =>
@@ -55,23 +72,32 @@ export function GameProvider({
   cards: CardEntity[]
   children: React.ReactNode
 }) {
-  const defaultGameState: GameState = {
-    state: 'idle',
-    phase: 0,
-    health: 18,
-    pickPoint: 0,
-    dangerousPoint: 0,
-    scoreInHand: 0,
-    cardsInHand: [],
-    deck: [],
-    trash: [],
-    knowledge: shuffleCardsByType(cards, 'KNOWLEDGE'),
-    dangerous: shuffleCardsByType(cards, 'DANGEROUS'),
-    skill: shuffleCardsByType(cards, 'SKILL'),
-    ageCards: shuffleCardsByType(cards, 'AGE'),
-    gameEvent: [],
-  }
-  const [gameState, setGameState] = React.useState<GameState>(defaultGameState)
+  const defaultGameState = React.useMemo<GameState>(
+    () => ({
+      state: 'idle',
+      phase: 0,
+      health: 18,
+      pickPoint: 0,
+      dangerousPoint: 0,
+      scoreInHand: 0,
+      cardsInHand: [],
+      deck: [],
+      trash: [],
+      knowledge: shuffleCardsByType(cards, 'KNOWLEDGE'),
+      dangerous: shuffleCardsByType(cards, 'DANGEROUS'),
+      skill: shuffleCardsByType(cards, 'SKILL'),
+      ageCards: shuffleCardsByType(cards, 'AGE'),
+      gameEvent: [],
+    }),
+    [cards],
+  )
+  const [gameState, dispatch] = React.useReducer(gameReducer, defaultGameState)
+
+  const setGameState = React.useCallback<
+    React.Dispatch<React.SetStateAction<GameState>>
+  >((nextState) => {
+    dispatch({ type: 'SET', payload: nextState })
+  }, [])
 
   return (
     <GameContext.Provider

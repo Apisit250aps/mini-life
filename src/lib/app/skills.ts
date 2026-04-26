@@ -83,9 +83,7 @@ const useCardAction = () => {
     return Object.keys(ACTIVE_SKILL)
   }, [])
 
-  const isPassiveSkill = (
-    action: string,
-  ): action is keyof typeof PASSIVE_SKILL => {
+  const isPassiveSkill = (action: string) => {
     return action in PASSIVE_SKILL
   }
 
@@ -95,7 +93,7 @@ const useCardAction = () => {
     return action in ACTIVE_SKILL
   }
 
-  const actionPassiveSkill = (action: keyof typeof PASSIVE_SKILL) => {
+  const actionPassiveSkill = (action: string) => {
     switch (action) {
       case 'HEALTH_ONE':
         setGameState((prev) => ({

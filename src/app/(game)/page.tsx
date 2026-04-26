@@ -21,7 +21,7 @@ export default function Page() {
       <div className="relative mx-auto grid h-full max-w-[1600px] grid-rows-[minmax(0,1fr)_auto] gap-4 px-4 py-4 sm:px-6 lg:px-8">
         <section className="grid min-h-0 gap-4 xl:grid-cols-[300px_minmax(0,1fr)_360px]">
           <PlayerStatusPanel gameId={gameId} gameState={gameState} />
-          <DrawnCardsPanel cardsInHand={gameState.cardsInHand} />
+          <DrawnCardsPanel />
           <EventStatusPanel
             gameEvents={gameState.gameEvent}
             selectedEvent={gameState.selectEvent}

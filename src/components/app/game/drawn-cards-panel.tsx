@@ -10,18 +10,14 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import { CardEntity } from '@/internal/entities/card.entity'
 import { useGame } from '@/lib/app/game'
-
-type DrawnCardsPanelProps = {
-  cardsInHand: CardEntity[]
-}
 
 const formatAction = (action: string | null | undefined) =>
   action ? action.replaceAll('_', ' ') : 'ไม่มีเอฟเฟกต์'
 
-export function DrawnCardsPanel({ cardsInHand }: DrawnCardsPanelProps) {
+export function DrawnCardsPanel() {
   const { gameState } = useGame()
+  const { cardsInHand } = gameState
   return (
     <Card className="h-full min-h-0 border-white/30 bg-white/75 shadow-xl shadow-slate-950/10 backdrop-blur-xl dark:border-white/10 dark:bg-white/5">
       <CardHeader className="gap-2">
