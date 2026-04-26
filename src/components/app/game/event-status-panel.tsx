@@ -11,7 +11,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import { GameEvent } from '@/lib/app/game'
+import { GameEvent, useGame } from '@/lib/app/game'
 
 type EventStatusPanelProps = {
   gameEvents: GameEvent[]
@@ -27,6 +27,7 @@ export function EventStatusPanel({
   selectedEvent,
   onSelectEvent,
 }: EventStatusPanelProps) {
+  const { gameState } = useGame()
   return (
     <Card className="h-full min-h-0 border-white/30 bg-white/75 shadow-xl shadow-slate-950/10 backdrop-blur-xl dark:border-white/10 dark:bg-white/5">
       <CardHeader className="gap-2">
@@ -49,13 +50,21 @@ export function EventStatusPanel({
               <p className="text-xs uppercase tracking-[0.24em] text-emerald-700 dark:text-emerald-300">
                 Event ที่เลือก
               </p>
-              <Badge className="rounded-full bg-emerald-600 text-white dark:bg-emerald-500">
-                ล่าสุด
-              </Badge>
+
+              <div className="">
+                <Badge className="rounded-full bg-emerald-600 text-white dark:bg-emerald-500">
+                  ล่าสุด
+                </Badge>
+                <Badge>
+                  {selectedEvent.dangerous.dangerous?.[gameState.phase] ?? 0}{' '}
+                  danger
+                </Badge>
+              </div>
             </div>
             <p className="text-sm font-semibold text-slate-900 dark:text-white">
               {selectedEvent.dangerous.title}
             </p>
+
             <p className="mt-1 text-xs text-slate-600 dark:text-slate-300">
               รับ: {selectedEvent.knowledge.title} • แต้ม{' '}
               {selectedEvent.knowledge.score ?? 0} •{' '}

@@ -35,6 +35,7 @@ export type GameState = {
 type GameContextValue = {
   gameId: string
   gameState: GameState
+  defaultGameState: GameState
   setGameState: React.Dispatch<React.SetStateAction<GameState>>
   // state
 }
@@ -53,15 +54,13 @@ export function GameProvider({
   cards: CardEntity[]
   children: React.ReactNode
 }) {
-  const [gameState, setGameState] = React.useState<GameState>({
+  const defaultGameState: GameState = {
     state: 'idle',
     phase: 0,
-    //
-    health: 20,
+    health: 18,
     pickPoint: 0,
     scoreInHand: 0,
     cardsInHand: [],
-    //
     deck: [],
     trash: [],
     knowledge: shuffleCardsByType(cards, 'KNOWLEDGE'),
@@ -69,7 +68,8 @@ export function GameProvider({
     skill: shuffleCardsByType(cards, 'SKILL'),
     ageCards: shuffleCardsByType(cards, 'AGE'),
     gameEvent: [],
-  })
+  }
+  const [gameState, setGameState] = React.useState<GameState>(defaultGameState)
 
   return (
     <GameContext.Provider
@@ -80,6 +80,8 @@ export function GameProvider({
         gameState,
         // state updater
         setGameState,
+        // default state
+        defaultGameState,
       }}
     >
       {children}

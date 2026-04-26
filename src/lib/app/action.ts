@@ -1,14 +1,23 @@
 import { useCallback, useEffect } from 'react'
 import { GameEvent, useGame } from './game'
+import { toast } from 'sonner'
+import { useOverlay } from '@/hooks/use-overlay'
 
 const useGameAction = () => {
+  const ui = useOverlay()
   const game = useGame()
   if (!game) {
     throw new Error('useGameAction must be used within a GameProvider')
   }
 
+  const { defaultGameState } = game
+  const resetGame = useCallback(() => {
+    game.setGameState(defaultGameState)
+  }, [defaultGameState, game])
+
   const drawCard = () => {
     if (!game.gameState.pickPoint) {
+      toast.error('คุณไม่มีแต้มให้จั่วการ์ด')
       return null
     }
     const card = game.gameState.skill[0]
@@ -24,6 +33,7 @@ const useGameAction = () => {
 
   const randomEvent = () => {
     if (game.gameState.state !== 'idle') {
+      toast.error('ไม่สามารถสุ่มเหตุการณ์ได้ในขณะนี้')
       return
     }
     const events: GameEvent[] = []
@@ -45,8 +55,6 @@ const useGameAction = () => {
   }
 
   const selectEvent = (event: GameEvent) => {
-    const unselect = game.gameState.gameEvent.filter((e) => e !== event)
-    console.log(unselect.length)
     game.setGameState((prev) => ({
       ...prev,
       deck: [...prev.deck, event.knowledge, event.dangerous],
@@ -57,10 +65,28 @@ const useGameAction = () => {
     }))
   }
 
+  const hurt = () => {
+    game.setGameState((prev) => ({
+      ...prev,
+      health: prev.health - 1,
+      pickPoint: prev.pickPoint + 1,
+    }))
+    drawCard()
+  }
+
+  useEffect(() => {
+    if (game.gameState.health <= 0) {
+      resetGame()
+      toast.error('เกมจบแล้ว! คุณแพ้แล้วนะ')
+    }
+  }, [game.gameState.health, resetGame])
+
   return {
     drawCard,
     randomEvent,
     selectEvent,
+    hurt,
+    resetGame,
   }
 }
 
