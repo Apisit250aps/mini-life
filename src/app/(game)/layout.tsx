@@ -1,6 +1,7 @@
 import { CardEntity } from '@/internal/entities/card.entity'
 import cardRepository from '@/internal/repositories/card.repo'
 import { GameProvider } from '@/lib/app/game'
+import { shuffle } from 'lodash'
 import React from 'react'
 import { v7 as uuidv7 } from 'uuid'
 
@@ -20,7 +21,7 @@ export default async function Layout({
   )
 
   return (
-    <GameProvider gameId={gameId} cards={deck}>
+    <GameProvider gameId={gameId} cards={shuffle(deck)}>
       {children}
     </GameProvider>
   )

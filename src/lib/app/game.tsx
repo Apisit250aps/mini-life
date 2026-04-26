@@ -1,29 +1,33 @@
 'use client'
 import { CardEntity } from '@/internal/entities/card.entity'
-import React, { createContext, useEffect } from 'react'
+import { shuffle } from 'lodash'
+import React, { createContext, use, useEffect } from 'react'
 
-type GameContextValue = {
-  gameId: string
-  // state
+type GameState = {
   health: number
   age: number
   knowledgeLevel: number
   // cards data
-  cards: CardEntity[]
   deck: CardEntity[]
   trash: CardEntity[]
+  // knowledge cards that player has picked
   knowledge: CardEntity[]
-  // actions
-  setHealth: React.Dispatch<React.SetStateAction<number>>
-  setAge: React.Dispatch<React.SetStateAction<number>>
-  setKnowledgeLevel: React.Dispatch<React.SetStateAction<number>>
-  // card actions
-  setDeck: React.Dispatch<React.SetStateAction<CardEntity[]>>
-  setTrash: React.Dispatch<React.SetStateAction<CardEntity[]>>
-  setKnowledge: React.Dispatch<React.SetStateAction<CardEntity[]>>
+  dangerous: CardEntity[]
+  skill: CardEntity[]
+  ageCards: CardEntity[]
+}
+
+type GameContextValue = {
+  gameId: string
+  gameState: GameState
+  setGameState: React.Dispatch<React.SetStateAction<GameState>>
+  // state
 }
 
 const GameContext = createContext<GameContextValue | null>(null)
+
+export const shuffleCardsByType = (cards: CardEntity[], type: string) =>
+  shuffle(cards.filter((card) => card.card === type))
 
 export function GameProvider({
   gameId,
@@ -34,33 +38,27 @@ export function GameProvider({
   cards: CardEntity[]
   children: React.ReactNode
 }) {
-  const [health, setHealth] = React.useState(100)
-  const [age, setAge] = React.useState(0)
-  const [knowledgeLevel, setKnowledgeLevel] = React.useState(0)
-  // card actions
-  const [deck, setDeck] = React.useState<CardEntity[]>(cards)
-  const [trash, setTrash] = React.useState<CardEntity[]>([])
-  const [knowledge, setKnowledge] = React.useState<CardEntity[]>([])
+  const [gameState, setGameState] = React.useState<GameState>({
+    health: 10,
+    age: 0,
+    knowledgeLevel: 0,
+    deck: [],
+    trash: [],
+    knowledge: shuffleCardsByType(cards, 'KNOWLEDGE'),
+    dangerous: shuffleCardsByType(cards, 'DANGEROUS'),
+    skill: shuffleCardsByType(cards, 'SKILL'),
+    ageCards: shuffleCardsByType(cards, 'AGE'),
+  })
+
   return (
     <GameContext.Provider
       value={{
         // id
         gameId,
         // state
-        health,
-        age,
-        knowledgeLevel,
-        cards,
-        deck,
-        trash,
-        knowledge,
-        // actions
-        setHealth,
-        setAge,
-        setKnowledgeLevel,
-        setDeck,
-        setTrash,
-        setKnowledge,
+        gameState,
+        // state updater
+        setGameState,
       }}
     >
       {children}
