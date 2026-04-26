@@ -1,12 +1,21 @@
 'use client'
 import { CardEntity } from '@/internal/entities/card.entity'
 import { shuffle } from 'lodash'
-import React, { createContext, use, useEffect } from 'react'
+import React, { createContext } from 'react'
 
-type GameState = {
+export type GameEvent = {
+  dangerous: CardEntity
+  knowledge: CardEntity
+}
+
+export type GameState = {
+  // player state
   health: number
-  age: number
-  knowledgeLevel: number
+  cardsInHand: CardEntity[]
+  scoreInHand: number
+  // environment state
+  gameEvent: GameEvent[]
+  selectEvent?: GameEvent
   // cards data
   deck: CardEntity[]
   trash: CardEntity[]
@@ -39,15 +48,16 @@ export function GameProvider({
   children: React.ReactNode
 }) {
   const [gameState, setGameState] = React.useState<GameState>({
-    health: 10,
-    age: 0,
-    knowledgeLevel: 0,
+    health: 20,
+    scoreInHand: 0,
+    cardsInHand: [],
     deck: [],
     trash: [],
     knowledge: shuffleCardsByType(cards, 'KNOWLEDGE'),
     dangerous: shuffleCardsByType(cards, 'DANGEROUS'),
     skill: shuffleCardsByType(cards, 'SKILL'),
     ageCards: shuffleCardsByType(cards, 'AGE'),
+    gameEvent: [],
   })
 
   return (
