@@ -27,6 +27,7 @@ const useGameAction = () => {
       cardsInHand: [...prev.cardsInHand, card],
       scoreInHand: prev.scoreInHand + (card.score || 0),
       pickPoint: prev.pickPoint - 1,
+      dangerousPoint: prev.dangerousPoint - (card.score || 0),
     }))
     return card
   }
@@ -62,6 +63,7 @@ const useGameAction = () => {
       selectEvent: event,
       pickPoint: event.dangerous.pick || 0,
       state: 'attack',
+      dangerousPoint: event.dangerous.dangerous?.[prev.phase] || 0,
     }))
   }
 

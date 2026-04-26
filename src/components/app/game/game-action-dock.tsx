@@ -38,10 +38,12 @@ export function GameActionDock() {
           >
             <Sword />
           </DockIcon>
-          <DockIcon className="bg-green-500 text-white" title="พร้อมรับมือ">
-            <Swords />
-          </DockIcon>
-          {gameState.pickPoint <= 0 && (
+          {(gameState.dangerousPoint <= 0 || gameState.pickPoint <= 0) && (
+            <DockIcon className="bg-green-500 text-white" title="พร้อมรับมือ">
+              <Swords />
+            </DockIcon>
+          )}
+          {gameState.pickPoint <= 0 && gameState.dangerousPoint > 0 && (
             <DockIcon
               className="bg-red-500 text-white"
               onClick={hurt}

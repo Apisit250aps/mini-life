@@ -30,6 +30,7 @@ export type GameState = {
   dangerous: CardEntity[]
   skill: CardEntity[]
   ageCards: CardEntity[]
+  dangerousPoint: number
 }
 
 type GameContextValue = {
@@ -59,6 +60,7 @@ export function GameProvider({
     phase: 0,
     health: 18,
     pickPoint: 0,
+    dangerousPoint: 0,
     scoreInHand: 0,
     cardsInHand: [],
     deck: [],

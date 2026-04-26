@@ -37,6 +37,7 @@ export function DrawnCardsPanel({ cardsInHand }: DrawnCardsPanelProps) {
             {cardsInHand.length} cards
           </Badge>
           <Badge>{gameState.state}</Badge>
+          <Badge>Dangerous Point: {gameState.dangerousPoint}</Badge>
         </CardAction>
       </CardHeader>
       <CardContent className="min-h-0 flex-1 overflow-y-auto pr-1 py-4">
