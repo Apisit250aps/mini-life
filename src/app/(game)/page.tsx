@@ -106,31 +106,28 @@ export default function Page() {
   }
 
   return (
-    <main className="relative min-h-screen overflow-hidden bg-[radial-gradient(circle_at_top,rgba(14,165,233,0.18),transparent_30%),radial-gradient(circle_at_bottom_right,rgba(249,115,22,0.18),transparent_28%),linear-gradient(180deg,#f8fbff_0%,#eef4ff_45%,#f8fafc_100%)] dark:bg-[radial-gradient(circle_at_top,rgba(14,165,233,0.2),transparent_25%),radial-gradient(circle_at_bottom_right,rgba(249,115,22,0.15),transparent_30%),linear-gradient(180deg,#09090b_0%,#0f172a_45%,#020617_100%)]">
+    <main className="relative h-screen overflow-hidden bg-[radial-gradient(circle_at_top,rgba(14,165,233,0.18),transparent_30%),radial-gradient(circle_at_bottom_right,rgba(249,115,22,0.18),transparent_28%),linear-gradient(180deg,#f8fbff_0%,#eef4ff_45%,#f8fafc_100%)] dark:bg-[radial-gradient(circle_at_top,rgba(14,165,233,0.2),transparent_25%),radial-gradient(circle_at_bottom_right,rgba(249,115,22,0.15),transparent_30%),linear-gradient(180deg,#09090b_0%,#0f172a_45%,#020617_100%)]">
       <GridPattern className="text-slate-900/10 dark:text-white/10" />
       <div className="pointer-events-none absolute left-0 top-0 h-72 w-72 rounded-full bg-sky-500/20 blur-3xl" />
       <div className="pointer-events-none absolute bottom-0 right-0 h-80 w-80 rounded-full bg-orange-400/20 blur-3xl" />
 
-      <div className="relative mx-auto flex min-h-screen max-w-7xl flex-col gap-6 px-4 py-6 sm:px-6 lg:px-8">
-        <section className="grid gap-4 xl:grid-cols-[340px_minmax(0,1fr)]">
-          <Card className="relative overflow-hidden border-white/30 bg-white/75 shadow-2xl shadow-sky-950/10 backdrop-blur-xl dark:border-white/10 dark:bg-white/5">
+      <div className="relative mx-auto grid h-full max-w-[1600px] grid-rows-[minmax(0,1fr)_auto] gap-4 px-4 py-4 sm:px-6 lg:px-8">
+        <section className="grid min-h-0 gap-4 xl:grid-cols-[300px_minmax(0,1fr)_360px]">
+          <Card className="relative h-full min-h-0 overflow-hidden border-white/30 bg-white/75 shadow-2xl shadow-sky-950/10 backdrop-blur-xl dark:border-white/10 dark:bg-white/5">
             <div className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-sky-500/70 to-transparent" />
             <CardHeader className="gap-3">
               <AnimatedGradientText className="w-fit">
-                Magic UI Game Board
+                Player Status
               </AnimatedGradientText>
-              <div className="space-y-2">
-                <CardTitle className="text-3xl font-semibold tracking-tight text-slate-950 dark:text-white">
-                  เกมกำลังอยู่ในสถานะ {gameState.state}
-                </CardTitle>
-                <CardDescription className="max-w-md text-sm text-slate-600 dark:text-slate-300">
-                  จัดเลย์เอาต์ใหม่ให้หน้าเกมอ่านสถานะได้เร็วขึ้น
-                  พร้อมพื้นหลังและเอฟเฟกต์แนว Magic UI
-                </CardDescription>
-              </div>
+              <CardTitle className="text-2xl font-semibold text-slate-950 dark:text-white">
+                สถานะผู้เล่น
+              </CardTitle>
+              <CardDescription className="text-sm text-slate-600 dark:text-slate-300">
+                สรุปค่าสำคัญและจำนวนการ์ดทุกกอง
+              </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="grid gap-3 sm:grid-cols-3 xl:grid-cols-1">
+            <CardContent className="space-y-4 overflow-y-auto pr-1">
+              <div className="space-y-3">
                 {overviewStats.map((item) => {
                   const Icon = item.icon
 
@@ -139,13 +136,13 @@ export default function Page() {
                       key={item.label}
                       className={`relative overflow-hidden rounded-2xl border border-white/40 bg-linear-to-br ${item.tone} p-4 dark:border-white/10`}
                     >
-                      <div className="absolute right-3 top-3 rounded-full bg-white/70 p-2 text-slate-700 shadow-sm dark:bg-white/10 dark:text-white">
-                        <Icon className="size-4" />
+                      <div className="flex items-center justify-between gap-2">
+                        <p className="text-xs uppercase tracking-[0.24em] text-slate-500 dark:text-slate-400">
+                          {item.label}
+                        </p>
+                        <Icon className="size-4 text-slate-600 dark:text-slate-300" />
                       </div>
-                      <p className="text-xs uppercase tracking-[0.24em] text-slate-500 dark:text-slate-400">
-                        {item.label}
-                      </p>
-                      <p className="mt-4 text-3xl font-semibold text-slate-950 dark:text-white">
+                      <p className="mt-2 text-3xl font-semibold text-slate-950 dark:text-white">
                         {item.value}
                       </p>
                       <p className="mt-1 text-xs text-slate-600 dark:text-slate-300">
@@ -157,175 +154,73 @@ export default function Page() {
               </div>
 
               <div className="rounded-2xl border border-dashed border-slate-300/80 bg-slate-950/3 p-4 dark:border-white/10 dark:bg-white/3">
-                <div className="flex items-center justify-between gap-4">
-                  <div>
-                    <p className="text-xs uppercase tracking-[0.24em] text-slate-500 dark:text-slate-400">
-                      Session
-                    </p>
-                    <p className="mt-1 font-mono text-sm text-slate-800 dark:text-slate-200">
-                      {gameId}
-                    </p>
-                  </div>
-                  <Badge
-                    variant="outline"
-                    className="rounded-full border-sky-500/30 bg-sky-500/10 px-3 py-1 text-sky-700 dark:text-sky-300"
-                  >
+                <div className="mb-3 flex items-center justify-between gap-2">
+                  <p className="text-xs uppercase tracking-[0.24em] text-slate-500 dark:text-slate-400">
+                    จำนวนการ์ด
+                  </p>
+                  <Badge variant="outline" className="rounded-full">
                     Phase {gameState.phase}
                   </Badge>
                 </div>
+                <div className="space-y-2">
+                  {resourceStats.map((item) => {
+                    const Icon = item.icon
+
+                    return (
+                      <div
+                        key={item.label}
+                        className="flex items-center justify-between rounded-xl border border-white/40 bg-white/60 px-3 py-2 text-sm dark:border-white/10 dark:bg-white/5"
+                      >
+                        <div className="flex items-center gap-2 text-slate-700 dark:text-slate-200">
+                          <Icon className="size-4" />
+                          <span>{item.label}</span>
+                        </div>
+                        <span className="font-semibold text-slate-900 dark:text-white">
+                          {item.value}
+                        </span>
+                      </div>
+                    )
+                  })}
+                </div>
+              </div>
+
+              <div className="rounded-2xl border border-slate-300/80 bg-white/60 p-4 dark:border-white/10 dark:bg-white/5">
+                <p className="text-xs uppercase tracking-[0.24em] text-slate-500 dark:text-slate-400">
+                  Session
+                </p>
+                <p className="mt-1 break-all font-mono text-xs text-slate-800 dark:text-slate-200">
+                  {gameId}
+                </p>
               </div>
             </CardContent>
           </Card>
 
-          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-            {resourceStats.map((item) => {
-              const Icon = item.icon
-
-              return (
-                <Card
-                  key={item.label}
-                  className="border-white/30 bg-white/70 shadow-lg shadow-slate-950/5 backdrop-blur-xl dark:border-white/10 dark:bg-white/5"
-                >
-                  <CardHeader>
-                    <div className="flex items-center justify-between gap-3">
-                      <div>
-                        <CardDescription className="text-xs uppercase tracking-[0.24em] text-slate-500 dark:text-slate-400">
-                          {item.label}
-                        </CardDescription>
-                        <CardTitle className="mt-2 text-3xl font-semibold text-slate-950 dark:text-white">
-                          {item.value}
-                        </CardTitle>
-                      </div>
-                      <div className="rounded-2xl border border-white/40 bg-white/80 p-3 text-slate-700 shadow-sm dark:border-white/10 dark:bg-white/10 dark:text-white">
-                        <Icon className="size-5" />
-                      </div>
-                    </div>
-                  </CardHeader>
-                </Card>
-              )
-            })}
-          </div>
-        </section>
-
-        <section className="grid gap-6 xl:grid-cols-[1.1fr_0.9fr]">
-          <Card className="border-white/30 bg-white/75 shadow-xl shadow-slate-950/10 backdrop-blur-xl dark:border-white/10 dark:bg-white/5">
+          <Card className="h-full min-h-0 border-white/30 bg-white/75 shadow-xl shadow-slate-950/10 backdrop-blur-xl dark:border-white/10 dark:bg-white/5">
             <CardHeader className="gap-2">
               <CardDescription className="text-xs uppercase tracking-[0.28em] text-slate-500 dark:text-slate-400">
-                Event Arena
+                Drawn Cards
               </CardDescription>
               <div className="flex items-center justify-between gap-4">
                 <CardTitle className="text-2xl font-semibold text-slate-950 dark:text-white">
-                  เหตุการณ์ที่เลือกได้ตอนนี้
+                  รายการการ์ดที่จั่ว
                 </CardTitle>
                 <Badge className="rounded-full bg-slate-950 text-white dark:bg-white dark:text-slate-950">
-                  {gameState.gameEvent.length} choices
-                </Badge>
-              </div>
-            </CardHeader>
-            <CardContent>
-              {gameState.gameEvent.length === 0 ? (
-                <div className="flex min-h-72 items-center justify-center rounded-3xl border border-dashed border-slate-300/80 bg-slate-950/3 p-8 text-center dark:border-white/10 dark:bg-white/3">
-                  <div className="space-y-3">
-                    <div className="mx-auto flex size-14 items-center justify-center rounded-full bg-sky-500/10 text-sky-600 dark:text-sky-300">
-                      <WandSparkles className="size-6" />
-                    </div>
-                    <p className="text-lg font-medium text-slate-900 dark:text-white">
-                      ยังไม่มีเหตุการณ์ในรอบนี้
-                    </p>
-                    <p className="text-sm text-slate-600 dark:text-slate-300">
-                      กดปุ่มสุ่มเหตุการณ์จาก dock ด้านล่างเพื่อสร้างตัวเลือกใหม่
-                    </p>
-                  </div>
-                </div>
-              ) : (
-                <div className="grid gap-4 md:grid-cols-2">
-                  {gameState.gameEvent.map((event, index) => (
-                    <Card
-                      key={`${event.dangerous.id}-${event.knowledge.id}-${index}`}
-                      className="relative overflow-hidden border-white/40 bg-[linear-gradient(180deg,rgba(255,255,255,0.92),rgba(255,255,255,0.72))] shadow-lg shadow-slate-950/10 dark:border-white/10 dark:bg-[linear-gradient(180deg,rgba(15,23,42,0.88),rgba(2,6,23,0.7))]"
-                    >
-                      <div className="absolute inset-x-6 top-0 h-px bg-linear-to-r from-transparent via-orange-500/70 to-transparent" />
-                      <CardHeader className="gap-3">
-                        <div className="flex items-start justify-between gap-3">
-                          <div>
-                            <CardDescription className="text-xs uppercase tracking-[0.24em] text-slate-500 dark:text-slate-400">
-                              Danger Card
-                            </CardDescription>
-                            <CardTitle className="mt-2 text-xl font-semibold text-slate-950 dark:text-white">
-                              {event.dangerous.title}
-                            </CardTitle>
-                          </div>
-                          <CardAction className="flex flex-wrap justify-end gap-1">
-                            {event.dangerous.dangerous?.map((danger, idx) => (
-                              <Badge
-                                key={idx}
-                                variant="destructive"
-                                className="rounded-full px-2.5 py-0.5"
-                              >
-                                {danger}
-                              </Badge>
-                            ))}
-                          </CardAction>
-                        </div>
-                      </CardHeader>
-                      <CardContent className="space-y-4">
-                        <div className="rounded-2xl border border-sky-200/70 bg-sky-500/5 p-4 dark:border-sky-400/20 dark:bg-sky-400/10">
-                          <p className="text-xs uppercase tracking-[0.24em] text-sky-700 dark:text-sky-300">
-                            Knowledge Reward
-                          </p>
-                          <p className="mt-2 text-base font-medium text-slate-900 dark:text-white">
-                            {event.knowledge.title}
-                          </p>
-                          <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
-                            แต้ม {event.knowledge.score ?? 0} •{' '}
-                            {formatAction(event.knowledge.action)}
-                          </p>
-                        </div>
-                      </CardContent>
-                      <CardFooter>
-                        <Button
-                          className="w-full rounded-xl bg-slate-950 text-white hover:bg-slate-800 dark:bg-white dark:text-slate-950 dark:hover:bg-slate-200"
-                          onClick={() => selectEvent(event)}
-                        >
-                          เลือกการ์ดนี้
-                        </Button>
-                      </CardFooter>
-                    </Card>
-                  ))}
-                </div>
-              )}
-            </CardContent>
-          </Card>
-
-          <Card className="border-white/30 bg-white/75 shadow-xl shadow-slate-950/10 backdrop-blur-xl dark:border-white/10 dark:bg-white/5">
-            <CardHeader className="gap-2">
-              <CardDescription className="text-xs uppercase tracking-[0.28em] text-slate-500 dark:text-slate-400">
-                Hand Stack
-              </CardDescription>
-              <div className="flex items-center justify-between gap-4">
-                <CardTitle className="text-2xl font-semibold text-slate-950 dark:text-white">
-                  การ์ดในมือ
-                </CardTitle>
-                <Badge
-                  variant="outline"
-                  className="rounded-full border-slate-300 bg-white/70 px-3 py-1 dark:border-white/15 dark:bg-white/10"
-                >
                   {gameState.cardsInHand.length} cards
                 </Badge>
               </div>
             </CardHeader>
-            <CardContent>
+            <CardContent className="min-h-0 flex-1 overflow-y-auto pr-1">
               {gameState.cardsInHand.length === 0 ? (
-                <div className="flex min-h-72 items-center justify-center rounded-3xl border border-dashed border-slate-300/80 bg-slate-950/3 p-8 text-center dark:border-white/10 dark:bg-white/3">
+                <div className="flex min-h-96 items-center justify-center rounded-3xl border border-dashed border-slate-300/80 bg-slate-950/3 p-8 text-center dark:border-white/10 dark:bg-white/3">
                   <div className="space-y-3">
                     <div className="mx-auto flex size-14 items-center justify-center rounded-full bg-orange-500/10 text-orange-600 dark:text-orange-300">
                       <Search className="size-6" />
                     </div>
                     <p className="text-lg font-medium text-slate-900 dark:text-white">
-                      มือว่างอยู่
+                      ยังไม่มีการ์ดที่จั่ว
                     </p>
                     <p className="text-sm text-slate-600 dark:text-slate-300">
-                      ใช้ปุ่มจั่วการ์ดเพื่อเติมตัวเลือกสำหรับเทิร์นถัดไป
+                      กดปุ่มจั่วการ์ดจาก dock ด้านล่างเพื่อเริ่มสะสมการ์ดในมือ
                     </p>
                   </div>
                 </div>
@@ -368,9 +263,98 @@ export default function Page() {
               )}
             </CardContent>
           </Card>
+
+          <Card className="h-full min-h-0 border-white/30 bg-white/75 shadow-xl shadow-slate-950/10 backdrop-blur-xl dark:border-white/10 dark:bg-white/5">
+            <CardHeader className="gap-2">
+              <CardDescription className="text-xs uppercase tracking-[0.28em] text-slate-500 dark:text-slate-400">
+                Event Status
+              </CardDescription>
+              <div className="flex items-center justify-between gap-4">
+                <CardTitle className="text-2xl font-semibold text-slate-950 dark:text-white">
+                  สถานะ Event
+                </CardTitle>
+                <Badge className="rounded-full bg-slate-950 text-white dark:bg-white dark:text-slate-950">
+                  {gameState.gameEvent.length} choices
+                </Badge>
+              </div>
+            </CardHeader>
+            <CardContent className="min-h-0 flex-1 overflow-y-auto pr-1">
+              {gameState.gameEvent.length === 0 ? (
+                <div className="flex min-h-96 items-center justify-center rounded-3xl border border-dashed border-slate-300/80 bg-slate-950/3 p-8 text-center dark:border-white/10 dark:bg-white/3">
+                  <div className="space-y-3">
+                    <div className="mx-auto flex size-14 items-center justify-center rounded-full bg-sky-500/10 text-sky-600 dark:text-sky-300">
+                      <WandSparkles className="size-6" />
+                    </div>
+                    <p className="text-lg font-medium text-slate-900 dark:text-white">
+                      ยังไม่มีเหตุการณ์ในรอบนี้
+                    </p>
+                    <p className="text-sm text-slate-600 dark:text-slate-300">
+                      กดปุ่มสุ่มเหตุการณ์เพื่อสร้าง event ใหม่
+                    </p>
+                  </div>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {gameState.gameEvent.map((event, index) => (
+                    <Card
+                      key={`${event.dangerous.id}-${event.knowledge.id}-${index}`}
+                      className="relative overflow-hidden border-white/40 bg-[linear-gradient(180deg,rgba(255,255,255,0.92),rgba(255,255,255,0.72))] shadow-lg shadow-slate-950/10 dark:border-white/10 dark:bg-[linear-gradient(180deg,rgba(15,23,42,0.88),rgba(2,6,23,0.7))]"
+                    >
+                      <div className="absolute inset-x-6 top-0 h-px bg-linear-to-r from-transparent via-orange-500/70 to-transparent" />
+                      <CardHeader className="gap-2">
+                        <div className="flex items-start justify-between gap-3">
+                          <div>
+                            <CardDescription className="text-xs uppercase tracking-[0.24em] text-slate-500 dark:text-slate-400">
+                              Danger
+                            </CardDescription>
+                            <CardTitle className="mt-1 text-base font-semibold text-slate-950 dark:text-white">
+                              {event.dangerous.title}
+                            </CardTitle>
+                          </div>
+                          <CardAction className="flex flex-wrap justify-end gap-1">
+                            {event.dangerous.dangerous?.map((danger, idx) => (
+                              <Badge
+                                key={idx}
+                                variant="destructive"
+                                className="rounded-full px-2 py-0.5"
+                              >
+                                {danger}
+                              </Badge>
+                            ))}
+                          </CardAction>
+                        </div>
+                      </CardHeader>
+                      <CardContent className="space-y-3">
+                        <div className="rounded-xl border border-sky-200/70 bg-sky-500/5 p-3 dark:border-sky-400/20 dark:bg-sky-400/10">
+                          <p className="text-xs uppercase tracking-[0.24em] text-sky-700 dark:text-sky-300">
+                            Knowledge
+                          </p>
+                          <p className="mt-1 text-sm font-medium text-slate-900 dark:text-white">
+                            {event.knowledge.title}
+                          </p>
+                          <p className="mt-1 text-xs text-slate-600 dark:text-slate-300">
+                            แต้ม {event.knowledge.score ?? 0} •{' '}
+                            {formatAction(event.knowledge.action)}
+                          </p>
+                        </div>
+                      </CardContent>
+                      <CardFooter>
+                        <Button
+                          className="w-full rounded-xl bg-slate-950 text-white hover:bg-slate-800 dark:bg-white dark:text-slate-950 dark:hover:bg-slate-200"
+                          onClick={() => selectEvent(event)}
+                        >
+                          เลือกการ์ดนี้
+                        </Button>
+                      </CardFooter>
+                    </Card>
+                  ))}
+                </div>
+              )}
+            </CardContent>
+          </Card>
         </section>
 
-        <div className="sticky bottom-4 left-0 flex justify-center pb-2">
+        <div className="flex justify-center pb-1">
           <Dock className="border-white/40 bg-white/75 px-3 shadow-2xl shadow-slate-950/10 backdrop-blur-xl dark:border-white/10 dark:bg-white/10">
             <DockIcon
               className="bg-slate-950 text-white dark:bg-white dark:text-slate-950"
