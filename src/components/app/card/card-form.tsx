@@ -10,6 +10,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm, useWatch } from 'react-hook-form'
 import React, { useMemo } from 'react'
 import { Button } from '@/components/ui/button'
+import { CARD_ACTION_OPTIONS } from '@/lib/app/skills'
 
 const CARD_TYPE_OPTIONS = [
   { value: 'KNOWLEDGE', label: 'ความรู้' },
@@ -26,25 +27,6 @@ const TOKEN_OPTIONS = [
 const CARD_MODE_OPTIONS = [
   { value: 'NORMAL', label: 'Normal' },
   { value: 'HARD', label: 'Hard' },
-]
-
-export const CARD_ACTION_OPTIONS = [
-  { value: 'HEALTH_ONE', label: 'Health +1' },
-  { value: 'HEALTH_TWO', label: 'Health +2' },
-  { value: 'PICK_ONE', label: 'Pick +1' },
-  { value: 'PICK_TWO', label: 'Pick +2' },
-  { value: 'DESTROY', label: 'Destroy' },
-  { value: 'MULTIPLY', label: 'Multiply' },
-  { value: 'COPY', label: 'Copy' },
-  { value: 'REDUCE', label: 'Reduce' },
-  { value: 'SORT', label: 'Sort' },
-  { value: 'EXCHANGE_ONE', label: 'Exchange +1' },
-  { value: 'EXCHANGE_TWO', label: 'Exchange +2' },
-  { value: 'SWAP', label: 'Swap' },
-  { value: 'HURT_ONE', label: 'Health -1' },
-  { value: 'HURT_TWO', label: 'Health -2' },
-  { value: 'ZERO', label: 'Zero' },
-  { value: 'STOP', label: 'Stop' },
 ]
 
 export default function CardForm({
@@ -83,7 +65,8 @@ export default function CardForm({
 
   const cardType = useWatch({ control: form.control, name: 'card' })
 
-  const isKnowledgeOrSkill = cardType === 'KNOWLEDGE' || cardType === 'SKILL' || cardType === 'AGE'
+  const isKnowledgeOrSkill =
+    cardType === 'KNOWLEDGE' || cardType === 'SKILL' || cardType === 'AGE'
   const isDangerous = cardType === 'DANGEROUS'
   const isAge = cardType === 'AGE'
 

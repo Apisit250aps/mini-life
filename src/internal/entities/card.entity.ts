@@ -1,26 +1,9 @@
+import { CARD_ACTION } from '@/lib/app/skills';
 import * as field from '@aps/next-api/entities'
 import { z } from 'zod'
 
 const CARD_TYPE = ['KNOWLEDGE', 'SKILL', 'DANGEROUS', 'AGE'] as const
-const CARD_ACTION = [
-  'HEALTH_ONE',
-  'HEALTH_TWO',
-  'PICK_ONE',
-  'PICK_TWO',
-  'DESTROY',
-  'MULTIPLY',
-  'COPY',
-  'REDUCE',
-  'SORT',
-  'EXCHANGE_ONE',
-  'EXCHANGE_TWO',
-  'SWAP',
-  // for age card
-  'HURT_ONE',
-  'HURT_TWO',
-  'ZERO',
-  'STOP',
-] as const
+
 const CARD_MODE = ['NORMAL', 'HARD'] as const
 const BaseCardEntity = field.BaseEntity({
   // general
@@ -43,7 +26,7 @@ const BaseCardEntity = field.BaseEntity({
   score: field.NumberField().default(0).unwrap().optional(),
   // knowledge and skill and age
   action: field
-    .EnumField(...CARD_ACTION)
+    .EnumField(...Object.keys(CARD_ACTION))
     .nullable()
     .default(null)
     .unwrap()

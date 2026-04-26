@@ -3,7 +3,7 @@ import { CardEntity } from '@/internal/entities/card.entity'
 import { CellContext, ColumnDef } from '@tanstack/react-table'
 import CardUpdateAction from './action/card-update'
 import CardDelete from './action/card-delete'
-import { CARD_ACTION_OPTIONS } from './card-form'
+import { CARD_ACTION_OPTIONS } from '@/lib/app/skills';
 
 const ColumnAction = ({ row }: CellContext<CardEntity, unknown>) => {
   return (

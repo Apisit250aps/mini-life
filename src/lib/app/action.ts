@@ -2,9 +2,12 @@ import { useCallback, useEffect } from 'react'
 import { GameEvent, useGame } from './game'
 import { toast } from 'sonner'
 import { useOverlay } from '@/hooks/use-overlay'
+import { useCardAction } from './skills'
 
 const useGameAction = () => {
   const ui = useOverlay()
+  const action = useCardAction()
+
   const game = useGame()
   if (!game) {
     throw new Error('useGameAction must be used within a GameProvider')
@@ -29,6 +32,11 @@ const useGameAction = () => {
       pickPoint: prev.pickPoint - 1,
       dangerousPoint: prev.dangerousPoint - (card.score || 0),
     }))
+
+    if (action.isPassiveSkill(card.action!)) {
+      action.actionPassiveSkill(card.action)
+    }
+
     return card
   }
 
