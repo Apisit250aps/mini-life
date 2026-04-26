@@ -27,7 +27,17 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import { IconDotsVertical } from '@tabler/icons-react'
-import { useId } from 'react'
+import { useId, createContext } from 'react'
+
+type DialogSize = 'sm' | 'md' | 'lg' | 'xl' | 'full'
+
+const DIALOG_SIZE = {
+  sm: 'sm:max-w-sm',
+  md: 'sm:max-w-lg',
+  lg: 'sm:max-w-2xl',
+  xl: 'sm:max-w-5xl',
+  full: 'sm:max-w-[90vw]',
+} as const
 
 type ConfirmDialogProps = {
   title: string
@@ -38,16 +48,6 @@ type ConfirmDialogProps = {
   onConfirm?: () => void
   dialogKey?: string
 }
-
-const DIALOG_SIZE = {
-  sm: 'sm:max-w-sm',
-  md: 'sm:max-w-lg',
-  lg: 'sm:max-w-2xl',
-  xl: 'sm:max-w-5xl',
-  full: 'sm:max-w-[90vw]',
-} as const
-
-type DialogSize = keyof typeof DIALOG_SIZE
 
 type ModalDialogProps = {
   title: string
@@ -194,6 +194,88 @@ function ModalDialog({
         {children}
       </DialogContent>
     </Dialog>
+  )
+}
+
+// Context for accessing overlay state in rendered dialogs/alerts
+export const OverlayRenderContext = createContext<{
+  dialogIds: string[]
+  alertIds: string[]
+} | null>(null)
+
+/**
+ * Component that renders programmatically added dialogs and alerts
+ * Should be placed in your layout/root component
+ */
+export function OverlayRenderer() {
+  const { open, closeOverlay, dialogs, alerts } = useOverlay()
+
+  return (
+    <OverlayRenderContext.Provider
+      value={{
+        dialogIds: dialogs.map((d) => d.id),
+        alertIds: alerts.map((a) => a.id),
+      }}
+    >
+      {dialogs.map(({ id, config }) => (
+        <Dialog
+          key={id}
+          open={open[id] || false}
+          onOpenChange={(v) => (!v ? closeOverlay(id) : undefined)}
+        >
+          <DialogContent
+            className={
+              config.size
+                ? DIALOG_SIZE[config.size as DialogSize]
+                : DIALOG_SIZE.md
+            }
+            onInteractOutside={
+              config.closeOutside === false
+                ? (e) => e.preventDefault()
+                : undefined
+            }
+          >
+            <DialogHeader>
+              <DialogTitle>{config.title}</DialogTitle>
+              {config.description && (
+                <DialogDescription>{config.description}</DialogDescription>
+              )}
+            </DialogHeader>
+            {config.children}
+          </DialogContent>
+        </Dialog>
+      ))}
+
+      {alerts.map(({ id, config }) => (
+        <AlertDialog
+          key={id}
+          open={open[id] || false}
+          onOpenChange={(v) => (!v ? closeOverlay(id) : undefined)}
+        >
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>{config.title}</AlertDialogTitle>
+              <AlertDialogDescription>
+                {config.description}
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel onClick={() => closeOverlay(id)}>
+                {config.cancelText || 'ยกเลิก'}
+              </AlertDialogCancel>
+              <AlertDialogAction
+                onClick={() => {
+                  config.onConfirm?.()
+                  closeOverlay(id)
+                }}
+              >
+                {config.confirmText || 'ดำเนินการต่อ'}
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      ))}
+    </OverlayRenderContext.Provider>
   )
 }
 

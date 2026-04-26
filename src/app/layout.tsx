@@ -5,6 +5,7 @@ import { cn } from '@/lib/utils'
 import { TooltipProvider } from '@/components/ui/tooltip'
 import { SessionProvider } from 'next-auth/react'
 import { OverlayProvider } from '@/hooks/use-overlay'
+import { OverlayRenderer } from '@/components/share/overlay'
 import TanstackQueryProvider from '@/hooks/tanstack-query'
 import { Toaster } from '@/components/ui/sonner'
 
@@ -58,6 +59,7 @@ export default async function RootLayout({
           <TanstackQueryProvider>
             <OverlayProvider>
               <TooltipProvider>{children}</TooltipProvider>
+              <OverlayRenderer />
               <Toaster position="top-right" />
             </OverlayProvider>
           </TanstackQueryProvider>
