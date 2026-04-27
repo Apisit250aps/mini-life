@@ -69,6 +69,8 @@ type GameActions = {
   pickCard: () => CardEntity | null
   pickCardWithPP: () => void
   pickCardWithHP: () => void
+  fightDangerous: () => void
+  readyIdle: () => void
   //
   randomEvents: () => void
   selectEvent: (event: GameEvent) => void
@@ -285,6 +287,27 @@ export const useGameStore = create<GameState & GameActions>()(
             ...prev.player,
             pickPoint: event.dangerous.pick ?? 0,
           },
+        }))
+      },
+      fightDangerous: () => {
+        const { player, getDangerousScore } = get()
+        const dangerousScore = getDangerousScore()
+
+        const damage = Math.max(0, dangerousScore - player.scoreInHand)
+        const totalDamage = damage >= 1 ? damage : 0
+        set((prev) => ({
+          state: 'destroy',
+          player: {
+            ...prev.player,
+            health: prev.player.health - totalDamage,
+            scoreInHand: 0,
+          },
+        }))
+      },
+      readyIdle: () => {
+        set((prev) => ({
+          ...prev,
+          state: 'idle',
         }))
       },
       refillDeck: () => {
