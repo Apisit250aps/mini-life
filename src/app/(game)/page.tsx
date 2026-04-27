@@ -41,7 +41,9 @@ export default function Page() {
                     <TypingAnimation>
                       pnpm dlx shadcn@latest init
                     </TypingAnimation>
-                    <AnimatedSpan className='text-red-500'>✔ Preflight checks.</AnimatedSpan>
+                    <AnimatedSpan className="text-red-500">
+                      ✔ Preflight checks.
+                    </AnimatedSpan>
                     <AnimatedSpan>✔ Validating Tailwind CSS.</AnimatedSpan>
                     <TypingAnimation>
                       Success! Project initialization completed.
@@ -51,6 +53,18 @@ export default function Page() {
               </div>
               <Card className="rounded-none outline-1 outline-green-500 bg-black text-green-500 h-140 ">
                 <CardContent>
+                  <pre className="p-4">
+                    <code className="grid gap-y-1 overflow-auto">
+                      <TypingAnimation>
+                        pnpm dlx shadcn@latest init
+                      </TypingAnimation>
+                      <AnimatedSpan>✔ Preflight checks.</AnimatedSpan>
+                      <AnimatedSpan>✔ Validating Tailwind CSS.</AnimatedSpan>
+                      <TypingAnimation>
+                        Success! Project initialization completed.
+                      </TypingAnimation>
+                    </code>
+                  </pre>
                   <Terminal className="rounded-none bg-transparent border-none">
                     <TypingAnimation>
                       pnpm dlx shadcn@latest init
