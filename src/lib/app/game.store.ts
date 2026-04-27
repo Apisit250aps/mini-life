@@ -263,15 +263,16 @@ export const useGameStore = create<GameState & GameActions>()(
         }))
       },
       selectEvent: (event) => {
-        const { environment } = get()
-        const unselected = environment.eventOptions.filter(
+        const {
+          environment: { eventOptions },
+        } = get()
+        const unselected = eventOptions.filter(
           (e) => e.eventId !== event.eventId,
         )
         const toDeck = [
           ...unselected.map((e) => e.knowledge),
           ...unselected.map((e) => e.dangerous),
         ] as CardEntity[]
-
         set((prev) => ({
           state: 'attack',
           cards: {

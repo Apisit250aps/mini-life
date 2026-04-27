@@ -21,7 +21,7 @@ export default function PlayerStatus() {
       <pre className="px-4">
         <code>Player Status</code>
       </pre>
-      <Terminal className="overflow-y-auto mt-0">
+      <Terminal className="">
         <TypingAnimation>initial player status:</TypingAnimation>
         <AnimatedSpan className="text-red-500">
           <span className="flex items-center">

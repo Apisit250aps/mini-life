@@ -28,6 +28,7 @@ import {
 } from '@/components/ui/dialog'
 import { IconDotsVertical } from '@tabler/icons-react'
 import { useId, createContext } from 'react'
+import { cn } from '@/lib/utils';
 
 type DialogSize = 'sm' | 'md' | 'lg' | 'xl' | 'full'
 
@@ -55,6 +56,7 @@ type ModalDialogProps = {
   trigger?: React.ReactNode
   children?: React.ReactNode
   closeOutside?: boolean
+  className?: string
   dialogKey?: string
   size?: DialogSize
 }
@@ -161,6 +163,7 @@ function ModalDialog({
   closeOutside = true,
   dialogKey,
   size = 'md',
+  className
 }: ModalDialogProps) {
   const { open, closeOverlay, openOverlay } = useOverlay()
   const overlayKey = useOverlayKey(DIALOG_KEY.MODAL_DIALOG, dialogKey)
@@ -179,12 +182,13 @@ function ModalDialog({
             e.preventDefault()
             openOverlay(overlayKey)
           }}
+          
         >
           {trigger}
         </DialogTrigger>
       )}
       <DialogContent
-        className={DIALOG_SIZE[size]}
+        className={cn(DIALOG_SIZE[size], className)}
         onInteractOutside={closeOutside ? undefined : (e) => e.preventDefault()}
       >
         <DialogHeader>

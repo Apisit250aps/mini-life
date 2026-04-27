@@ -11,6 +11,9 @@ import {
   TypingAnimation,
 } from '@/components/ui/terminal'
 import PlayerStatus from '@/components/app/game/player-status'
+import GameStatus from '@/components/app/game/game-status'
+import PlayerAction from '@/components/app/game/player-action'
+import GameInitStatus from '@/components/app/game/game-init-status'
 
 export default function Page() {
   return (
@@ -23,37 +26,17 @@ export default function Page() {
             <div className="grid grid-cols-1 gap-4">
               <div className="grid gap-2 grid-cols-2 h-50 text-green-500 ">
                 <PlayerStatus />
-                <PlayerStatus />
+                <GameStatus />
               </div>
               <Card className="rounded-none outline-1 outline-green-500 bg-black text-green-500 h-140 ">
                 <CardContent>
-                  <pre className="p-4">
-                    <code className="grid gap-y-1 overflow-auto">
-                      <TypingAnimation>
-                        pnpm dlx shadcn@latest init
-                      </TypingAnimation>
-                      <AnimatedSpan>✔ Preflight checks.</AnimatedSpan>
-                      <AnimatedSpan>✔ Validating Tailwind CSS.</AnimatedSpan>
-                      <TypingAnimation>
-                        Success! Project initialization completed.
-                      </TypingAnimation>
-                    </code>
-                  </pre>
-                  <Terminal className="rounded-none bg-transparent border-none">
-                    <TypingAnimation>
-                      pnpm dlx shadcn@latest init
-                    </TypingAnimation>
-                    <AnimatedSpan>✔ Preflight checks.</AnimatedSpan>
-                    <AnimatedSpan>✔ Validating Tailwind CSS.</AnimatedSpan>
-                    <TypingAnimation>
-                      Success! Project initialization completed.
-                    </TypingAnimation>
-                  </Terminal>
+                  <GameInitStatus />
                 </CardContent>
               </Card>
             </div>
           </section>
         </div>
+        <PlayerAction />
       </div>
     </main>
   )
