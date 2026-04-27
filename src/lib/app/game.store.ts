@@ -250,6 +250,7 @@ export const useGameStore = create<GameState & GameActions>()(
       },
 
       randomEvents: () => {
+        if (get().state !== 'idle') return
         const { environment } = get()
 
         const shuffled = [...environment.events].sort(() => 0.5 - Math.random())
