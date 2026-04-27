@@ -1,4 +1,4 @@
-"use client"
+'use client'
 
 import {
   Children,
@@ -10,16 +10,16 @@ import {
   useState,
   type ComponentType,
   type RefAttributes,
-} from "react"
+} from 'react'
 import {
   motion,
   useInView,
   type DOMMotionComponents,
   type HTMLMotionProps,
   type MotionProps,
-} from "motion/react"
+} from 'motion/react'
 
-import { cn } from "@/lib/utils"
+import { cn } from '@/lib/utils'
 
 interface SequenceContextValue {
   completeItem: (index: number) => void
@@ -54,7 +54,7 @@ type MotionElementType = Extract<
   keyof typeof motionElements
 >
 type TerminalTypingMotionComponent = ComponentType<
-  Omit<HTMLMotionProps<"span">, "ref"> & RefAttributes<HTMLElement>
+  Omit<HTMLMotionProps<'span'>, 'ref'> & RefAttributes<HTMLElement>
 >
 
 interface AnimatedSpanProps extends MotionProps {
@@ -85,6 +85,7 @@ export const AnimatedSpan = ({
     if (!sequence.sequenceStarted) return
     if (hasStarted) return
     if (sequence.activeIndex === itemIndex) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setHasStarted(true)
     }
   }, [sequence, hasStarted, itemIndex])
@@ -97,7 +98,7 @@ export const AnimatedSpan = ({
       initial={{ opacity: 0, y: -5 }}
       animate={shouldAnimate ? { opacity: 1, y: 0 } : { opacity: 0, y: -5 }}
       transition={{ duration: 0.3, delay: sequence ? 0 : delay / 1000 }}
-      className={cn("grid text-sm font-normal tracking-tight", className)}
+      className={cn('grid text-sm font-normal tracking-tight', className)}
       onAnimationComplete={() => {
         if (!sequence) return
         if (itemIndex === null) return
@@ -110,7 +111,7 @@ export const AnimatedSpan = ({
   )
 }
 
-interface TypingAnimationProps extends Omit<MotionProps, "children"> {
+interface TypingAnimationProps extends Omit<MotionProps, 'children'> {
   children: string
   className?: string
   duration?: number
@@ -124,19 +125,19 @@ export const TypingAnimation = ({
   className,
   duration = 60,
   delay = 0,
-  as: Component = "span",
+  as: Component = 'span',
   startOnView = true,
   ...props
 }: TypingAnimationProps) => {
-  if (typeof children !== "string") {
-    throw new Error("TypingAnimation: children must be a string. Received:")
+  if (typeof children !== 'string') {
+    throw new Error('TypingAnimation: children must be a string. Received:')
   }
 
   const MotionComponent = motionElements[
     Component
   ] as TerminalTypingMotionComponent
 
-  const [displayedText, setDisplayedText] = useState<string>("")
+  const [displayedText, setDisplayedText] = useState<string>('')
   const [started, setStarted] = useState(false)
   const elementRef = useRef<HTMLElement | null>(null)
   const isInView = useInView(elementRef as React.RefObject<Element>, {
@@ -150,7 +151,7 @@ export const TypingAnimation = ({
   const sequenceStarted = sequence?.sequenceStarted ?? false
   const sequenceActiveIndex = sequence?.activeIndex ?? null
   const sequenceCompleteItemRef = useRef<
-    SequenceContextValue["completeItem"] | null
+    SequenceContextValue['completeItem'] | null
   >(null)
   const sequenceItemIndexRef = useRef<number | null>(null)
 
@@ -164,6 +165,7 @@ export const TypingAnimation = ({
 
     if (hasSequence && itemIndex !== null) {
       if (sequenceStarted && !started && sequenceActiveIndex === itemIndex) {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setStarted(true)
       }
     } else if (!startOnView || isInView) {
@@ -218,7 +220,7 @@ export const TypingAnimation = ({
   return (
     <MotionComponent
       ref={elementRef}
-      className={cn("text-sm font-normal tracking-tight", className)}
+      className={cn('text-sm font-normal tracking-tight', className)}
       {...props}
     >
       {displayedText}
@@ -273,11 +275,11 @@ export const Terminal = ({
     <div
       ref={containerRef}
       className={cn(
-        "border-border bg-background z-0 h-full max-h-100 w-full max-w-lg rounded-xl border",
-        className
+        'border-border bg-background z-0 h-full max-h-100 w-full max-w-lg rounded-xl border',
+        className,
+        'rounded-none bg-transparent border-none',
       )}
     >
-      
       <pre className="p-4">
         <code className="grid gap-y-1 overflow-auto">{wrappedChildren}</code>
       </pre>
