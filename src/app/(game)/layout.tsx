@@ -21,9 +21,6 @@ export default async function Layout({
       return {
         ...card,
         id,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        deletedAt: null,
       } as CardEntity
     }),
   )
