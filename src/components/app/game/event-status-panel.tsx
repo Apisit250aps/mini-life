@@ -23,7 +23,7 @@ const formatAction = (action: string | null | undefined) =>
   action ? action.replaceAll('_', ' ') : 'ไม่มีเอฟเฟกต์'
 
 export function EventStatusPanel({}: EventStatusPanelProps) {
-  const { phase, environment } = useGameStore()
+  const { phase, environment, selectEvent } = useGameStore()
 
   return (
     <Card className="h-full min-h-0 border-white/30 bg-white/75 shadow-xl shadow-slate-950/10 backdrop-blur-xl dark:border-white/10 dark:bg-white/5">
@@ -131,7 +131,7 @@ export function EventStatusPanel({}: EventStatusPanelProps) {
                 <CardFooter>
                   <Button
                     className="w-full rounded-xl bg-slate-950 text-white hover:bg-slate-800 dark:bg-white dark:text-slate-950 dark:hover:bg-slate-200"
-                    onClick={() => {}}
+                    onClick={() => selectEvent(event)}
                   >
                     เลือกการ์ดนี้
                   </Button>

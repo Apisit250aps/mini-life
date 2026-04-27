@@ -5,6 +5,9 @@ import { create } from 'zustand'
 import { persist, createJSONStorage } from 'zustand/middleware'
 import { encryptedStorage } from './encrypt-store'
 import { shuffleCardsByType } from './game'
+
+import { v7 as uuid } from 'uuid'
+
 const isBrowser = typeof window !== 'undefined'
 
 // กำหนด Storage
@@ -23,15 +26,20 @@ const encrypted = createJSONStorage(() => ({
 }))
 
 export type GameEvent = {
+  eventId: string
   dangerous: CardEntity
   knowledge: CardEntity
+}
+
+export type CardInHand = CardEntity & {
+  used: boolean
 }
 
 export type State = 'idle' | 'event' | 'attack' | 'destroy' | 'game_over'
 export type Player = {
   health: number
   pickPoint: number
-  cardsInHand: CardEntity[]
+  cardsInHand: CardInHand[]
   scoreInHand: number
 }
 export type CardState = {
@@ -76,6 +84,7 @@ type GameActions = {
   pickCardWithHP: () => void
   //
   randomEvents: () => void
+  selectEvent: (event: GameEvent) => void
 }
 
 const initialState: GameState = {
@@ -140,10 +149,14 @@ export const useGameStore = create<GameState & GameActions>()(
         const skillCards = shuffleCardsByType(deck, 'SKILL')
         const ageCards = shuffleCardsByType(deck, 'AGE')
 
-        const events = dangerousCards.map((dangerous, i) => ({
-          dangerous,
-          knowledge: knowledgeCards[i],
-        }))
+        const events = dangerousCards.map((dangerous, i) => {
+          const eventId = uuid()
+          return {
+            eventId,
+            dangerous,
+            knowledge: knowledgeCards[i],
+          }
+        })
 
         set({
           cards: {
@@ -159,6 +172,14 @@ export const useGameStore = create<GameState & GameActions>()(
             event: null,
             eventOptions: [],
           },
+          player: {
+            health: 18,
+            pickPoint: 0,
+            cardsInHand: [],
+            scoreInHand: 0,
+          },
+          state: 'idle',
+          phase: 0,
         })
       },
 
@@ -176,47 +197,55 @@ export const useGameStore = create<GameState & GameActions>()(
         const { environment, phase } = get()
         return environment.event?.dangerous.dangerous?.[phase] || 0
       },
-
       // Logic ที่แก้ไขแล้ว: Immutable update
       pickCard: () => {
-        const { cards, player } = get()
+        const { cards } = get()
         if (cards.skill.length === 0) return null
-
-        const skill = [...cards.skill]
-        const card = skill.pop() || null
-
+        const card = cards.skill[0]
+        const skill = cards.skill.slice(1)
         if (card) {
-          set({
+          set((prev) => ({
             player: {
-              ...player,
-              cardsInHand: [...player.cardsInHand, card],
+              ...prev.player,
+              scoreInHand: prev.player.scoreInHand + (card.score ?? 0),
+              cardsInHand: [
+                ...prev.player.cardsInHand,
+                { ...card, used: card.action ? false : true },
+              ],
             },
             cards: {
-              ...cards,
+              ...prev.cards,
               skill,
             },
-          })
+          }))
         }
         return card
       },
-
       pickCardWithPP: () => {
         const { player, pickCard } = get()
         if (player.pickPoint <= 0) return null
 
         const card = pickCard()
         if (card) {
-          set({ player: { ...player, pickPoint: player.pickPoint - 1 } })
+          set((prev) => ({
+            player: { ...prev.player, pickPoint: prev.player.pickPoint - 1 },
+          }))
         }
       },
 
       pickCardWithHP: () => {
         const { player, pickCard } = get()
+        console.log(
+          'Attempting to pick card with HP. Current health:',
+          player.health,
+        )
         if (player.health <= 0) return null
 
         const card = pickCard()
         if (card) {
-          set({ player: { ...player, health: player.health - 1 } })
+          set((prev) => ({
+            player: { ...prev.player, health: prev.player.health - 1 },
+          }))
         }
       },
 
@@ -230,9 +259,8 @@ export const useGameStore = create<GameState & GameActions>()(
           (e) => !selected.includes(e),
         )
 
-        console.log('Random events selected:', selected)
-
         set((prev) => ({
+          state: 'event',
           environment: {
             ...prev.environment,
             events: remaining,
@@ -241,20 +269,37 @@ export const useGameStore = create<GameState & GameActions>()(
           },
         }))
       },
+      selectEvent: (event) => {
+        const { environment } = get()
+        const unselected = environment.eventOptions.filter(
+          (e) => e.eventId !== event.eventId,
+        )
+        const toDeck = [
+          ...unselected.map((e) => e.knowledge),
+          ...unselected.map((e) => e.dangerous),
+        ] as CardEntity[]
+
+        set((prev) => ({
+          state: 'attack',
+          cards: {
+            ...prev.cards,
+            deck: [...prev.cards.deck, ...toDeck],
+          },
+          environment: {
+            ...prev.environment,
+            event,
+            eventOptions: [],
+          },
+          player: {
+            ...prev.player,
+            pickPoint: event.dangerous.pick ?? 0,
+          },
+        }))
+      },
     }),
     {
       name: 'mini-life-game',
       storage: storage,
-      partialize: (state) => {
-        const { environment, ...rest } = state
-        return {
-          ...rest,
-          environment: {
-            events: environment.events,
-            event: environment.event,
-          },
-        }
-      },
     },
   ),
 )

@@ -10,14 +10,15 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import { useGameStore } from '@/lib/app/game.store';
+import { useGameStore } from '@/lib/app/game.store'
 
 const formatAction = (action: string | null | undefined) =>
   action ? action.replaceAll('_', ' ') : 'ไม่มีเอฟเฟกต์'
 
 export function DrawnCardsPanel() {
   const { player, state, phase } = useGameStore()
-  const { cardsInHand } = player
+  const cardInHand = useGameStore((state) => state.player.cardsInHand)
+
   return (
     <Card className="h-full min-h-0 border-white/30 bg-white/75 shadow-xl shadow-slate-950/10 backdrop-blur-xl dark:border-white/10 dark:bg-white/5">
       <CardHeader className="gap-2">
@@ -30,14 +31,14 @@ export function DrawnCardsPanel() {
 
         <CardAction className="space-x-2">
           <Badge className=" bg-slate-950 text-white dark:bg-white dark:text-slate-950">
-            {cardsInHand.length} cards
+            {player.cardsInHand.length} cards
           </Badge>
           <Badge>{state}</Badge>
           <Badge>Dangerous Point: {phase}</Badge>
         </CardAction>
       </CardHeader>
       <CardContent className="min-h-0 flex-1 overflow-y-auto pr-1 py-4">
-        {cardsInHand.length === 0 ? (
+        {player.cardsInHand.length === 0 ? (
           <div className="flex min-h-96 items-center justify-center rounded-3xl border border-dashed border-slate-300/80 bg-slate-950/3 p-8 text-center dark:border-white/10 dark:bg-white/3">
             <div className="space-y-3">
               <div className="mx-auto flex size-14 items-center justify-center rounded-full bg-orange-500/10 text-orange-600 dark:text-orange-300">
@@ -53,7 +54,7 @@ export function DrawnCardsPanel() {
           </div>
         ) : (
           <AnimatedList className="items-stretch gap-3" delay={180}>
-            {cardsInHand.map((card, index) => {
+            {cardInHand.map((card, index) => {
               return (
                 <Card
                   key={`${card.id}-${index}`}

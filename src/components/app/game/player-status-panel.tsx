@@ -147,7 +147,6 @@ export function PlayerStatusPanel() {
           <div className="space-y-2">
             {resourceStats.map((item) => {
               const Icon = item.icon
-
               return (
                 <div
                   key={item.label}

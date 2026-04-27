@@ -17,14 +17,13 @@ export function GameProvider({
   children: React.ReactNode
 }) {
   const shuffledCards = shuffle(cards)
-  const { setupGame, resetGame } = useGameStore()
+  const { setupGame } = useGameStore()
 
   useEffect(() => {
     setupGame({
       deck: shuffledCards,
     })
-    resetGame()
-  }, [setupGame, resetGame, shuffledCards])
+  }, [setupGame, shuffledCards])
 
   return (
     <GameContext.Provider value={{ cards }}>{children}</GameContext.Provider>
