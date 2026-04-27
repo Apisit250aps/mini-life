@@ -5,28 +5,68 @@ import { DrawnCardsPanel } from '@/components/app/game/drawn-cards-panel'
 import { EventStatusPanel } from '@/components/app/game/event-status-panel'
 import { GameActionDock } from '@/components/app/game/game-action-dock'
 import { PlayerStatusPanel } from '@/components/app/game/player-status-panel'
-import { GridPattern } from '@/components/ui/grid-pattern'
 import { GameEvent, useGameStore } from '@/lib/app/game.store'
+import { FlickeringGrid } from '@/components/ui/flickering-grid'
+import { Card, CardContent } from '@/components/ui/card'
+import {
+  AnimatedSpan,
+  Terminal,
+  TypingAnimation,
+} from '@/components/ui/terminal'
 
 export default function Page() {
   return (
-    <main className="relative h-screen overflow-hidden bg-[radial-gradient(circle_at_top,rgba(14,165,233,0.18),transparent_30%),radial-gradient(circle_at_bottom_right,rgba(249,115,22,0.18),transparent_28%),linear-gradient(180deg,#f8fbff_0%,#eef4ff_45%,#f8fafc_100%)] dark:bg-[radial-gradient(circle_at_top,rgba(14,165,233,0.2),transparent_25%),radial-gradient(circle_at_bottom_right,rgba(249,115,22,0.15),transparent_30%),linear-gradient(180deg,#09090b_0%,#0f172a_45%,#020617_100%)]">
-      <GridPattern className="text-slate-900/10 dark:text-white/10" />
-      <div className="pointer-events-none absolute left-0 top-0 h-72 w-72 rounded-full bg-sky-500/20 blur-3xl" />
-      <div className="pointer-events-none absolute bottom-0 right-0 h-80 w-80 rounded-full bg-orange-400/20 blur-3xl" />
-      <div className="relative mx-auto grid h-full max-w-[1600px] grid-rows-[minmax(0,1fr)_auto] gap-4 px-4 py-4 sm:px-6 lg:px-8">
-        <section className="grid min-h-0 gap-4 xl:grid-cols-[300px_minmax(0,1fr)_360px]">
-          <PlayerStatusPanel />
-          <DrawnCardsPanel />
-          <EventStatusPanel
-            gameEvents={[]}
-            onSelectEvent={function (event: GameEvent): void {
-              throw new Error('Function not implemented.')
-            }}
-          />
-        </section>
+    <main className="relative h-screen overflow-hidden bg-black">
+      <FlickeringGrid color={'rgb(0, 255, 0)'} maxOpacity={1} gridGap={10} />
+      <div className="absolute inset-0 z-10 flex flex-col items-center justify-between p-4">
+        <div className="grid grid-cols-5 w-full">
+          {/* เอา div เปล่าออก และใช้ col-start-2 เพื่อขยับ section ไปอยู่ตรงกลาง */}
+          <section className="col-span-3 col-start-2">
+            <div className="grid grid-cols-1 gap-4">
+              <div className="grid gap-2 grid-cols-2 h-40  text-green-500 ">
+                <div className="border border-green-500 bg-black">
+                  <Terminal className="rounded-none bg-transparent border-none">
+                    <TypingAnimation>
+                      pnpm dlx shadcn@latest init
+                    </TypingAnimation>
+                    <AnimatedSpan>✔ Preflight checks.</AnimatedSpan>
+                    <AnimatedSpan>✔ Validating Tailwind CSS.</AnimatedSpan>
+                    <TypingAnimation>
+                      Success! Project initialization completed.
+                    </TypingAnimation>
+                  </Terminal>
+                </div>
+                <div className="border border-green-500 bg-black">
+                  <Terminal className="rounded-none bg-transparent border-none">
+                    <TypingAnimation>
+                      pnpm dlx shadcn@latest init
+                    </TypingAnimation>
+                    <AnimatedSpan className='text-red-500'>✔ Preflight checks.</AnimatedSpan>
+                    <AnimatedSpan>✔ Validating Tailwind CSS.</AnimatedSpan>
+                    <TypingAnimation>
+                      Success! Project initialization completed.
+                    </TypingAnimation>
+                  </Terminal>
+                </div>
+              </div>
+              <Card className="rounded-none outline-1 outline-green-500 bg-black text-green-500 h-140 ">
+                <CardContent>
+                  <Terminal className="rounded-none bg-transparent border-none">
+                    <TypingAnimation>
+                      pnpm dlx shadcn@latest init
+                    </TypingAnimation>
+                    <AnimatedSpan>✔ Preflight checks.</AnimatedSpan>
+                    <AnimatedSpan>✔ Validating Tailwind CSS.</AnimatedSpan>
+                    <TypingAnimation>
+                      Success! Project initialization completed.
+                    </TypingAnimation>
+                  </Terminal>
+                </CardContent>
+              </Card>
+            </div>
+          </section>
+        </div>
       </div>
-      <GameActionDock />
     </main>
   )
 }
