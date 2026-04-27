@@ -11,7 +11,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import { GameEvent, useGameStore } from '@/lib/app/game.store';
+import { GameEvent, useGameStore } from '@/lib/app/game.store'
 
 type EventStatusPanelProps = {
   gameEvents: GameEvent[]
@@ -22,12 +22,9 @@ type EventStatusPanelProps = {
 const formatAction = (action: string | null | undefined) =>
   action ? action.replaceAll('_', ' ') : 'ไม่มีเอฟเฟกต์'
 
-export function EventStatusPanel({
-  gameEvents,
-  selectedEvent,
-  onSelectEvent,
-}: EventStatusPanelProps) {
-  const { phase } = useGameStore()
+export function EventStatusPanel({}: EventStatusPanelProps) {
+  const { phase, environment } = useGameStore()
+
   return (
     <Card className="h-full min-h-0 border-white/30 bg-white/75 shadow-xl shadow-slate-950/10 backdrop-blur-xl dark:border-white/10 dark:bg-white/5">
       <CardHeader className="gap-2">
@@ -39,12 +36,12 @@ export function EventStatusPanel({
             สถานะ Event
           </CardTitle>
           <Badge className="rounded-full bg-slate-950 text-white dark:bg-white dark:text-slate-950">
-            {gameEvents.length} choices
+            {environment.eventOptions.length} choices
           </Badge>
         </div>
       </CardHeader>
       <CardContent className="min-h-0 flex-1 overflow-y-auto pr-1">
-        {selectedEvent ? (
+        {environment.event ? (
           <div className="mb-3 rounded-2xl border border-emerald-300/70 bg-emerald-500/10 p-3 dark:border-emerald-400/30 dark:bg-emerald-400/10">
             <div className="mb-2 flex items-center justify-between gap-2">
               <p className="text-xs uppercase tracking-[0.24em] text-emerald-700 dark:text-emerald-300">
@@ -56,24 +53,23 @@ export function EventStatusPanel({
                   ล่าสุด
                 </Badge>
                 <Badge>
-                  {selectedEvent.dangerous.dangerous?.[phase] ?? 0}{' '}
-                  danger
+                  {environment.event.dangerous.dangerous?.[phase] ?? 0} danger
                 </Badge>
               </div>
             </div>
             <p className="text-sm font-semibold text-slate-900 dark:text-white">
-              {selectedEvent.dangerous.title}
+              {environment.event.dangerous.title}
             </p>
 
             <p className="mt-1 text-xs text-slate-600 dark:text-slate-300">
-              รับ: {selectedEvent.knowledge.title} • แต้ม{' '}
-              {selectedEvent.knowledge.score ?? 0} •{' '}
-              {formatAction(selectedEvent.knowledge.action)}
+              รับ: {environment.event.knowledge.title} • แต้ม{' '}
+              {environment.event.knowledge.score ?? 0} •{' '}
+              {formatAction(environment.event.knowledge.action)}
             </p>
           </div>
         ) : null}
 
-        {gameEvents.length === 0 ? (
+        {environment.eventOptions.length === 0 ? (
           <div className="flex min-h-96 items-center justify-center rounded-3xl border border-dashed border-slate-300/80 bg-slate-950/3 p-8 text-center dark:border-white/10 dark:bg-white/3">
             <div className="space-y-3">
               <div className="mx-auto flex size-14 items-center justify-center rounded-full bg-sky-500/10 text-sky-600 dark:text-sky-300">
@@ -89,7 +85,7 @@ export function EventStatusPanel({
           </div>
         ) : (
           <div className="space-y-3">
-            {gameEvents.map((event, index) => (
+            {environment.eventOptions.map((event, index) => (
               <Card
                 key={`${event.dangerous.id}-${event.knowledge.id}-${index}`}
                 className="relative overflow-hidden border-white/40 bg-[linear-gradient(180deg,rgba(255,255,255,0.92),rgba(255,255,255,0.72))] shadow-lg shadow-slate-950/10 dark:border-white/10 dark:bg-[linear-gradient(180deg,rgba(15,23,42,0.88),rgba(2,6,23,0.7))]"
@@ -135,7 +131,7 @@ export function EventStatusPanel({
                 <CardFooter>
                   <Button
                     className="w-full rounded-xl bg-slate-950 text-white hover:bg-slate-800 dark:bg-white dark:text-slate-950 dark:hover:bg-slate-200"
-                    onClick={() => onSelectEvent(event)}
+                    onClick={() => {}}
                   >
                     เลือกการ์ดนี้
                   </Button>

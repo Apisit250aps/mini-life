@@ -3,6 +3,7 @@
 import { CardEntity } from '@/internal/entities/card.entity'
 import { create } from 'zustand'
 import { persist, createJSONStorage } from 'zustand/middleware'
+import { encryptedStorage } from './encrypt-store'
 import { shuffleCardsByType } from './game'
 const isBrowser = typeof window !== 'undefined'
 
@@ -10,10 +11,16 @@ const isBrowser = typeof window !== 'undefined'
 const storage = isBrowser
   ? createJSONStorage(() => localStorage)
   : createJSONStorage(() => ({
-      getItem: () => null,
-      setItem: () => {},
-      removeItem: () => {},
+      getItem: encryptedStorage.getItem,
+      setItem: encryptedStorage.setItem,
+      removeItem: encryptedStorage.removeItem,
     }))
+
+const encrypted = createJSONStorage(() => ({
+  getItem: encryptedStorage.getItem,
+  setItem: encryptedStorage.setItem,
+  removeItem: encryptedStorage.removeItem,
+}))
 
 export type GameEvent = {
   dangerous: CardEntity
@@ -40,6 +47,7 @@ export type CardState = {
 export type GameEnvironment = {
   events: GameEvent[]
   event: GameEvent | null
+  eventOptions: GameEvent[]
 }
 
 type GameState = {
@@ -64,8 +72,10 @@ type GameActions = {
   getDangerousScore: () => number
   // game actions
   pickCard: () => CardEntity | null
-  pickCardWithPP: () => CardEntity | null
-  pickCardWithHP: () => CardEntity | null
+  pickCardWithPP: () => void
+  pickCardWithHP: () => void
+  //
+  randomEvents: () => void
 }
 
 const initialState: GameState = {
@@ -89,6 +99,7 @@ const initialState: GameState = {
   environment: {
     events: [],
     event: null,
+    eventOptions: [],
   },
 }
 export const useGameStore = create<GameState & GameActions>()(
@@ -114,6 +125,7 @@ export const useGameStore = create<GameState & GameActions>()(
       environment: {
         events: [],
         event: null,
+        eventOptions: [],
       },
 
       // --- Actions ---
@@ -123,10 +135,10 @@ export const useGameStore = create<GameState & GameActions>()(
 
       resetGame: () => {
         const { deck } = get()
-        const dangerousCards = deck.filter((c) => c.card === 'DANGEROUS')
-        const knowledgeCards = deck.filter((c) => c.card === 'KNOWLEDGE')
-        const skillCards = deck.filter((c) => c.card === 'SKILL')
-        const ageCards = deck.filter((c) => c.card === 'AGE')
+        const dangerousCards = shuffleCardsByType(deck, 'DANGEROUS')
+        const knowledgeCards = shuffleCardsByType(deck, 'KNOWLEDGE')
+        const skillCards = shuffleCardsByType(deck, 'SKILL')
+        const ageCards = shuffleCardsByType(deck, 'AGE')
 
         const events = dangerousCards.map((dangerous, i) => ({
           dangerous,
@@ -145,6 +157,7 @@ export const useGameStore = create<GameState & GameActions>()(
           environment: {
             events,
             event: null,
+            eventOptions: [],
           },
         })
       },
@@ -195,7 +208,6 @@ export const useGameStore = create<GameState & GameActions>()(
         if (card) {
           set({ player: { ...player, pickPoint: player.pickPoint - 1 } })
         }
-        return card
       },
 
       pickCardWithHP: () => {
@@ -206,12 +218,33 @@ export const useGameStore = create<GameState & GameActions>()(
         if (card) {
           set({ player: { ...player, health: player.health - 1 } })
         }
-        return card
+      },
+
+      randomEvents: () => {
+        const { environment } = get()
+
+        const shuffled = [...environment.events].sort(() => 0.5 - Math.random())
+        const selected = shuffled.slice(0, 3)
+
+        const remaining = environment.events.filter(
+          (e) => !selected.includes(e),
+        )
+
+        console.log('Random events selected:', selected)
+
+        set((prev) => ({
+          environment: {
+            ...prev.environment,
+            events: remaining,
+            eventOptions: selected,
+            event: null,
+          },
+        }))
       },
     }),
     {
       name: 'mini-life-game',
-      storage,
+      storage: storage,
       partialize: (state) => {
         const { environment, ...rest } = state
         return {

@@ -5,10 +5,13 @@ import { useGame } from '@/lib/app/game'
 import { useGameStore } from '@/lib/app/game.store'
 
 export function GameActionDock() {
-  const { state, player } = useGameStore()
+  const { state, randomEvents } = useGameStore()
   const handleDrawCard = () => {}
 
-  const handleRandomEvent = () => {}
+  const handleRandomEvent = () => {
+    console.log('Random event triggered!')
+    randomEvents()
+  }
   return (
     <Dock className="sticky bottom-10 z-20 flex justify-center pb-1 border-white/40 bg-white/75 px-3 shadow-2xl shadow-slate-950/10 backdrop-blur-xl dark:border-white/10 dark:bg-white/10">
       {['idle', 'event'].includes(state) && (
