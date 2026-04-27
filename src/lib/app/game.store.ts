@@ -2,28 +2,14 @@
 
 import { CardEntity } from '@/internal/entities/card.entity'
 import { create } from 'zustand'
-import { persist, createJSONStorage } from 'zustand/middleware'
-import { encryptedStorage } from './encrypt-store'
+import { persist } from 'zustand/middleware'
+import { localStore } from './encrypt-store'
 import { shuffleCardsByType } from './game'
 
 import { v7 as uuid } from 'uuid'
+import { omit } from 'lodash'
 
-const isBrowser = typeof window !== 'undefined'
-
-// กำหนด Storage
-const storage = isBrowser
-  ? createJSONStorage(() => localStorage)
-  : createJSONStorage(() => ({
-      getItem: encryptedStorage.getItem,
-      setItem: encryptedStorage.setItem,
-      removeItem: encryptedStorage.removeItem,
-    }))
-
-const encrypted = createJSONStorage(() => ({
-  getItem: encryptedStorage.getItem,
-  setItem: encryptedStorage.setItem,
-  removeItem: encryptedStorage.removeItem,
-}))
+const storage = localStore()
 
 export type GameEvent = {
   eventId: string
@@ -72,6 +58,7 @@ type GameActions = {
   setupGame: (state: Partial<GameState>) => void
   startGame: () => void
   resetGame: () => void
+  refillDeck: () => void
   //
   setPlayerState: (state: Partial<Player>) => void
   setEnvironmentState: (state: Partial<GameEnvironment>) => void
@@ -218,6 +205,9 @@ export const useGameStore = create<GameState & GameActions>()(
               skill,
             },
           }))
+          if (get().cards.skill.length === 0) {
+            get().refillDeck()
+          }
         }
         return card
       },
@@ -297,10 +287,28 @@ export const useGameStore = create<GameState & GameActions>()(
           },
         }))
       },
+      refillDeck: () => {
+        set((prev) => ({
+          cards: {
+            ...prev.cards,
+            skill: [
+              ...(prev.player.cardsInHand
+                .filter((card) => card.used)
+                .map((card) => omit(card, ['used'])) as CardEntity[]),
+              ...prev.cards.skill,
+            ],
+            trash: [],
+          },
+          player: {
+            ...prev.player,
+            cardsInHand: prev.player.cardsInHand.filter((card) => !card.used),
+          },
+        }))
+      },
     }),
     {
       name: 'mini-life-game',
-      storage: storage,
+      storage,
     },
   ),
 )
