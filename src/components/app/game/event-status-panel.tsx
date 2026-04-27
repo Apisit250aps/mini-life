@@ -11,7 +11,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import { GameEvent, useGame } from '@/lib/app/game'
+import { GameEvent, useGameStore } from '@/lib/app/game.store';
 
 type EventStatusPanelProps = {
   gameEvents: GameEvent[]
@@ -27,7 +27,7 @@ export function EventStatusPanel({
   selectedEvent,
   onSelectEvent,
 }: EventStatusPanelProps) {
-  const { gameState } = useGame()
+  const { phase } = useGameStore()
   return (
     <Card className="h-full min-h-0 border-white/30 bg-white/75 shadow-xl shadow-slate-950/10 backdrop-blur-xl dark:border-white/10 dark:bg-white/5">
       <CardHeader className="gap-2">
@@ -56,7 +56,7 @@ export function EventStatusPanel({
                   ล่าสุด
                 </Badge>
                 <Badge>
-                  {selectedEvent.dangerous.dangerous?.[gameState.phase] ?? 0}{' '}
+                  {selectedEvent.dangerous.dangerous?.[phase] ?? 0}{' '}
                   danger
                 </Badge>
               </div>

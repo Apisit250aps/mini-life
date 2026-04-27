@@ -10,14 +10,14 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import { useGame } from '@/lib/app/game'
+import { useGameStore } from '@/lib/app/game.store';
 
 const formatAction = (action: string | null | undefined) =>
   action ? action.replaceAll('_', ' ') : 'ไม่มีเอฟเฟกต์'
 
 export function DrawnCardsPanel() {
-  const { gameState } = useGame()
-  const { cardsInHand } = gameState
+  const { player, state, phase } = useGameStore()
+  const { cardsInHand } = player
   return (
     <Card className="h-full min-h-0 border-white/30 bg-white/75 shadow-xl shadow-slate-950/10 backdrop-blur-xl dark:border-white/10 dark:bg-white/5">
       <CardHeader className="gap-2">
@@ -32,8 +32,8 @@ export function DrawnCardsPanel() {
           <Badge className=" bg-slate-950 text-white dark:bg-white dark:text-slate-950">
             {cardsInHand.length} cards
           </Badge>
-          <Badge>{gameState.state}</Badge>
-          <Badge>Dangerous Point: {gameState.dangerousPoint}</Badge>
+          <Badge>{state}</Badge>
+          <Badge>Dangerous Point: {phase}</Badge>
         </CardAction>
       </CardHeader>
       <CardContent className="min-h-0 flex-1 overflow-y-auto pr-1 py-4">

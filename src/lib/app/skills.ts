@@ -1,7 +1,7 @@
 'use client'
 
 import { useMemo } from 'react'
-import { useGame } from './game'
+import { useGameStore } from './game.store'
 
 const PASSIVE_SKILL = {
   HEALTH_ONE: 'เพิ่มพลังชีวิต 1',
@@ -74,7 +74,7 @@ const useActiveSkill = (action: keyof typeof ACTIVE_SKILL) => {
 }
 
 const useCardAction = () => {
-  const { gameState, setGameState } = useGame()
+  const { setPlayerState, player } = useGameStore()
 
   const passiveSkills = useMemo(() => {
     return Object.keys(PASSIVE_SKILL)
@@ -96,52 +96,44 @@ const useCardAction = () => {
   const actionPassiveSkill = (action: string) => {
     switch (action) {
       case 'HEALTH_ONE':
-        setGameState((prev) => ({
-          ...prev,
-          health: prev.health + 1,
-        }))
+        setPlayerState({
+          health: player.health + 1,
+        })
         break
       case 'HEALTH_TWO':
-        setGameState((prev) => ({
-          ...prev,
-          health: prev.health + 2,
-        }))
+        setPlayerState({
+          health: player.health + 2,
+        })
         break
       case 'PICK_ONE':
-        setGameState((prev) => ({
-          ...prev,
-          pickPoint: prev.pickPoint + 1,
-        }))
+        setPlayerState({
+          pickPoint: player.pickPoint + 1,
+        })
         break
       case 'PICK_TWO':
-        setGameState((prev) => ({
-          ...prev,
-          pickPoint: prev.pickPoint + 2,
-        }))
+        setPlayerState({
+          pickPoint: player.pickPoint + 2,
+        })
         break
       case 'HURT_ONE':
-        setGameState((prev) => ({
-          ...prev,
-          health: prev.health - 1,
-        }))
+        setPlayerState({
+          health: player.health - 1,
+        })
         break
       case 'HURT_TWO':
-        setGameState((prev) => ({
-          ...prev,
-          health: prev.health - 2,
-        }))
+        setPlayerState({
+          health: player.health - 2,
+        })
         break
       case 'ZERO':
-        setGameState((prev) => ({
-          ...prev,
-          score: 0,
-        }))
+        setPlayerState({
+          scoreInHand: 0,
+        })
         break
       case 'STOP':
-        setGameState((prev) => ({
-          ...prev,
+        setPlayerState({
           pickPoint: 0,
-        }))
+        })
         break
       default:
         break

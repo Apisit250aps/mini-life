@@ -19,7 +19,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import { GameState } from '@/lib/app/game'
+import { useGameStore } from '@/lib/app/game.store'
 
 type OverviewStat = {
   label: string
@@ -35,33 +35,26 @@ type ResourceStat = {
   icon: LucideIcon
 }
 
-type PlayerStatusPanelProps = {
-  gameId: string
-  gameState: GameState
-}
-
-export function PlayerStatusPanel({
-  gameId,
-  gameState,
-}: PlayerStatusPanelProps) {
+export function PlayerStatusPanel() {
+  const { player, cards, phase } = useGameStore()
   const overviewStats: OverviewStat[] = [
     {
       label: 'พลังชีวิต',
-      value: gameState.health,
+      value: player.health,
       note: 'เหลือก่อนเกมจบ',
       icon: Heart,
       tone: 'from-rose-500/25 via-rose-500/5 to-transparent',
     },
     {
       label: 'แต้มในมือ',
-      value: gameState.scoreInHand,
-      note: `${gameState.cardsInHand.length} ใบในมือ`,
+      value: player.scoreInHand,
+      note: `${player.cardsInHand.length} ใบในมือ`,
       icon: Sparkles,
       tone: 'from-sky-500/25 via-sky-500/5 to-transparent',
     },
     {
       label: 'จั่วได้',
-      value: gameState.pickPoint,
+      value: player.pickPoint,
       note: 'แต้มสำหรับเลือกการ์ด',
       icon: WandSparkles,
       tone: 'from-amber-500/25 via-amber-500/5 to-transparent',
@@ -71,32 +64,32 @@ export function PlayerStatusPanel({
   const resourceStats: ResourceStat[] = [
     {
       label: 'กองหลัก',
-      value: gameState.deck.length,
+      value: cards.deck.length,
       icon: Layers3,
     },
     {
       label: 'กองทิ้ง',
-      value: gameState.trash.length,
+      value: cards.trash.length,
       icon: Trash2,
     },
     {
       label: 'ความรู้',
-      value: gameState.knowledge.length,
+      value: cards.knowledge.length,
       icon: BookOpen,
     },
     {
       label: 'อันตราย',
-      value: gameState.dangerous.length,
+      value: cards.dangerous.length,
       icon: AlertTriangle,
     },
     {
       label: 'สกิล',
-      value: gameState.skill.length,
+      value: cards.skill.length,
       icon: Swords,
     },
     {
       label: 'อายุ',
-      value: gameState.ageCards.length,
+      value: cards.age.length,
       icon: Sparkles,
     },
   ]
@@ -148,7 +141,7 @@ export function PlayerStatusPanel({
               จำนวนการ์ด
             </p>
             <Badge variant="outline" className="rounded-full">
-              Phase {gameState.phase}
+              Phase {phase}
             </Badge>
           </div>
           <div className="space-y-2">
@@ -178,7 +171,7 @@ export function PlayerStatusPanel({
             Session
           </p>
           <p className="mt-1 break-all font-mono text-xs text-slate-800 dark:text-slate-200">
-            {gameId}
+            {'session'}
           </p>
         </div>
       </CardContent>

@@ -20,9 +20,5 @@ export default async function Layout({
     }),
   )
 
-  return (
-    <GameProvider gameId={gameId} cards={shuffle(deck)}>
-      {children}
-    </GameProvider>
-  )
+  return <GameProvider cards={shuffle(deck)}>{children}</GameProvider>
 }
