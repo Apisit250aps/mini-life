@@ -1,3 +1,4 @@
+'use client'
 import CryptoJS from 'crypto-js'
 import { createJSONStorage } from 'zustand/middleware'
 

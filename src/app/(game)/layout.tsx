@@ -24,7 +24,6 @@ export default async function Layout({
       } as CardEntity
     }),
   )
-  console.log('deck', deck)
 
   return (
     <GameProvider cards={shuffle(deck as CardEntity[])}>

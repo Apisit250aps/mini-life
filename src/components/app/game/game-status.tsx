@@ -25,12 +25,12 @@ export default function GameStatus() {
         <code>State [{state}]</code>
         <code>Events: {environment.events.length}</code>
       </pre>
-      <Terminal className="">
+      <Terminal className="" startOnView={true} sequence={!true}>
         {environment.event && (
-          <>
-            <TypingAnimation>
-              {environment.event.dangerous.title}
-            </TypingAnimation>
+          <React.Fragment>
+            <AnimatedSpan className="text-green-500">
+              Tasks {'>'} {environment.event.dangerous.title}
+            </AnimatedSpan>
             <AnimatedSpan className="text-red-500">
               <span className="flex items-center">
                 <IconSkull size={14} /> DANGEROUS:{' '}
@@ -39,21 +39,35 @@ export default function GameStatus() {
             </AnimatedSpan>
             <AnimatedSpan className="text-yellow-500">
               <span className="flex items-center">
-                <IconCards size={14} /> Pick point: {player.pickPoint}
+                <IconCards size={14} /> Destroy:{' '}
+                {environment.event.dangerous.token}
               </span>
             </AnimatedSpan>
-            <AnimatedSpan className="text-yellow-500">
+            <AnimatedSpan className="text-green-500">
+              ============================================
+            </AnimatedSpan>
+            <AnimatedSpan className="text-green-500">
+              Learning skill {'>'} {environment.event.dangerous.title}
+            </AnimatedSpan>
+            <AnimatedSpan className="text-green-500">
               <span className="flex items-center">
-                <IconHandStop size={14} /> Cards in hand:{' '}
-                {player.cardsInHand.length}
+                <IconSwords size={14} /> SKILL:{' '}
+                {environment.event.knowledge.title}
               </span>
             </AnimatedSpan>
-            <AnimatedSpan className="text-yellow-500">
+            <AnimatedSpan className="text-green-500">
               <span className="flex items-center">
-                <IconSwords size={14} /> Attack Point: {player.scoreInHand}
+                <IconSwords size={14} /> SCORE:{' '}
+                {environment.event.knowledge.score}
               </span>
             </AnimatedSpan>
-          </>
+            <AnimatedSpan className="text-green-500">
+              <span className="flex items-center">
+                <IconSwords size={14} /> ACTION:{' '}
+                {environment.event.knowledge.action}
+              </span>
+            </AnimatedSpan>
+          </React.Fragment>
         )}
       </Terminal>
     </TerminalContent>
